@@ -12,7 +12,7 @@ public class TeemaFAS {
     public static ArrayList[] roundStack = new ArrayList[ROUNDS];
     public static int[][] TeamPenalty = new int[TEAMS][ROUNDS];
     
-    
+    //Git kokeilu
     public static void main(String[] args) {
         InitializeList.StartList(); //Initializes roundStack List for all rounds in random rounds
         PenaltyC.countTeamPenalty(); //Counts penalty for each team
