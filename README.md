@@ -1,5 +1,18 @@
 # TeemaSecond
-Iiron toteutus
+Teema 2:n kehitys
+
+Tällähetkellä pyritään asettamaan 15 joukkuetta 36 kierrokselle (210 peliä). Tämänhetkinen toteutus sallii yhden joukkueen poissaolon kierrokselta, mutta tästähuolimatta virheitä esiintyy edelleen. 
+
+Pohdintoja:
+- Pitääkö pitää kirjaa siitä mille joukkueelle on sallittu poissaolo ja millä kierroksella?
+
+Lisäpelit ja pelien lukituksen toteutukset löytyy initializeList.java:sta mutta en ole ottanut niitä vielä käyttöön ennenkuin saadaan noi joukkueet asettumaan kierroksille. 
+
+Vieras- ja kotiestojen toteutus uupuu edelleen.
+
+Rajoitteet:
+http://web.samk.fi/staff/jari.kyngas/teemat/Rajoitteet_2.txt
+
 
 Jos haluat ajaa Teema 1:n niin:
 - aseta TeemaFAS:ssa joukkueet 10:een ja kierrokset 18
