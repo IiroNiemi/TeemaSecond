@@ -29,6 +29,8 @@ public class InitializeList {
                                     {10,7},{11,10},{9,14},{15,9},{14,15}};
     //Lukitut ottelut indeksi-korjataan, eli vähennetään yksi numero jokaisesta
     public static int[][] lockedGames = {{14,8,1},{10,12,1},{4,6,1},{2,8,2},{4,12,2},{10,11,5},{3 ,7 ,6},{1 ,13,8},{14,9,8},{12,13,10},{13,12,11},{8,1 ,11},{9,15,11},{14,1,14},{10,13,14},{15,1,16},{6,4,16},{4,6,17},{2,1 ,17},{14,15,17},{9,14,19},{1,15,22},{6,1,23},{9,13,23},{1,14,25},{14,13,29},{1,8,31},{10,1,32},{6,14,32},{9,12,32},{12,2,33},{1,9,34},{15,9,35},{3,13,36},{6,15,4},{8,15,5},{11,9,4},{4,9,5},{8,4,13},{12,4,14},{14,6,13},{9,6,14},{6,12,15},{11,12,16},{11,8,18},{7,8,19},{9,11,24},{15,11,25},{12,7,25},{8,7,26},{15,6,27},{12,6,28},{9,8,27},{15,8,28},{4,14,31},{8,11,34},{12,11,35}};
+    public static int[][] iFixList = new int[57][3]; //sama lista kuin yllä mutta korjattu yhdellä numerolla alaspäin
+
     
     public static void StartList(){
         List roundList = new ArrayList();
@@ -77,17 +79,29 @@ public class InitializeList {
             roundList.clear();
         }
         
-        //Lukitaan määritetyt pelit
+        //indeksikorjataan lukittujen pelien lista 
+        int home = 0;
+        int visit = 0;
+        int round = 0;
+        for (int k = 0; k < iFixList.length; k++) {
+            home = lockedGames[k][0]-1;
+            visit = lockedGames[k][1]-1;
+            round = lockedGames[k][2]-1;
+            iFixList[k][0] = home;
+            iFixList[k][1] = visit;
+            iFixList[k][2] = round;
+        }
         
+        //Lukitaan määritetyt pelit
         for (int i = 0; i < ROUNDS; i++) {
             List RoundMatches = new ArrayList();
-            RoundMatches.addAll(roundStack[i]);
+            RoundMatches.addAll(roundStack[i]); //otetaan kierroksen pelit listaan
             for (int j = 0; j < RoundMatches.size(); j++) {
-                Match MO = (Match)RoundMatches.get(j);
-                for (int k = 0; k < lockedGames.length; k++) {
-                    if(MO.getHome() == lockedGames[k][0]-1 && MO.getVisitor() == lockedGames[k][1]-1){
-                        int LockInt = lockedGames[k][2]-1;
-                        Match newMatch = new Match(MO.getHome(), MO.getVisitor(), AllGameDates[LockInt], LockInt); // -1 on indeksikorjaus
+                Match MO = (Match)RoundMatches.get(j); //Otetaan yhden kierroksen Match-objektit muuttujaan
+                for (int k = 0; k < iFixList.length; k++) {
+                    if(MO.getHome() == iFixList[k][0] && MO.getVisitor() == iFixList[k][1]){
+                        int LockInt = iFixList[k][2];
+                        Match newMatch = new Match(MO.getHome(), MO.getVisitor(), AllGameDates[LockInt], LockInt);
                         
                         newMatch.setLockedToRow(true); //Ottelu on lukittu tälle kierrokselle
                         roundStack[LockInt].add(newMatch);
@@ -97,6 +111,7 @@ public class InitializeList {
             }
         }
         
+             
         
         
         
