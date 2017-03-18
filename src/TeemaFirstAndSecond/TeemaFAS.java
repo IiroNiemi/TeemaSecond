@@ -18,7 +18,7 @@ public class TeemaFAS {
         PenaltyC.countTeamPenalty(); //Counts penalty for each team
         
         System.out.println("Hakee...");
-        while(PenaltyC.getOverallPenalty() > 50){
+        while(PenaltyC.getOverallPenalty() > 84){
             InitializeList.StartList(); //arpoo uuden listan
             
             //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
