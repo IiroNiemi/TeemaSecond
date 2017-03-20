@@ -36,6 +36,7 @@ public class InitializeList {
         List roundList = new ArrayList();
         Match singleMatch = null;
         List retval = new ArrayList();
+        roundStack = new ArrayList[ROUNDS]; //Varmuuden vuoksi tyhjennetään
         
         //Kaikki ottelut listaan
         for (int i = 0; i <= TEAMS; i++) {
@@ -71,7 +72,7 @@ public class InitializeList {
         }
         
         //Erotellaan lukitut lisäpelit (Lisätään myöhemmin)
-        System.out.println("Lukitut lisäpelit:");
+        
         for (int i = 0; i < lockedMatches.size(); i++) {  
             Match MO = (Match)lockedMatches.get(i);
             if( Collections.frequency(lockedMatches, MO) >= 2){ //Lukittu lisäpeli esiintyy kaksi kertaa!
@@ -133,6 +134,11 @@ public class InitializeList {
             roundStack[i].addAll(roundList); //asetetaan pelit oikealle kierrokselle tietorakenteeseen
             roundList.clear();
         }
+        
+        //Tyhjennetään listat ettei lukitukset pinoudu
+        extraMatches.clear();
+        lockedMatches.clear();
+        lockedextraMatches.clear();
     }
 
     

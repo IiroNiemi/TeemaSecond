@@ -21,9 +21,9 @@ public class TeemaFAS {
         
         
         
-        /*
+        
         System.out.println("Hakee...");
-        while(PenaltyC.getOverallPenalty() > 84){
+        //while(PenaltyC.getOverallPenalty() > 50){
             InitializeList.StartList(); //arpoo uuden listan
             
             //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
@@ -35,9 +35,9 @@ public class TeemaFAS {
 
             }
             
-            if(PenaltyC.getOverallPenalty() < 150) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
-        }
-        */
+            if(PenaltyC.getOverallPenalty() < 60) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+        //}
+        
 
                 
         //PenaltyC.PrintTeamErrors();
