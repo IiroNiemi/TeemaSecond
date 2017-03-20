@@ -22,9 +22,7 @@ public class PenaltyC {
         List RoundTeams = new ArrayList();
         int teamP = 0;
         
-        
         TeamPenalty = new int[TEAMS][ROUNDS]; //Virheet nollataan ettei pinoudu.
-        
         
         for (int i = 0; i < roundStack.length; i++) {
             RoundMatches.addAll(roundStack[i]);
@@ -58,14 +56,10 @@ public class PenaltyC {
                             teamP += Collections.frequency(RoundTeams, j) - 1; 
                         }    
                     }
-                    
-                    
-                    
-                    
                     TeamPenalty[j][i] = teamP;
                 }
-                
             }
+            
             RoundTeams.clear();
             RoundMatches.clear();
         }   
@@ -182,6 +176,17 @@ public class PenaltyC {
         }
                 
         System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
+    }
+    public static void PrintRoundStackMatches(){
+        //Tulostaa kaikki joukkueet, 540 kappaletta 15 ottelijalla
+        int sum = 0;
+        for (Object singleRound : roundStack) { 
+            ArrayList RList = (ArrayList)singleRound;
+            for (Object SingleMatch : RList) {
+                    sum++;
+            }
+        }
+        System.out.println(sum);
     }
 }
     

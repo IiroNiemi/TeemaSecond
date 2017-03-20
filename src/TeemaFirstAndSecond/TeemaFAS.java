@@ -15,8 +15,13 @@ public class TeemaFAS {
     //Git kokeilu
     public static void main(String[] args) {
         InitializeList.StartList(); //Initializes roundStack List for all rounds in random rounds
+        PenaltyC.PrintRoundStackMatches();
         PenaltyC.countTeamPenalty(); //Counts penalty for each team
         
+        
+        
+        
+        /*
         System.out.println("Hakee...");
         while(PenaltyC.getOverallPenalty() > 84){
             InitializeList.StartList(); //arpoo uuden listan
@@ -32,12 +37,13 @@ public class TeemaFAS {
             
             if(PenaltyC.getOverallPenalty() < 150) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         }
-        
+        */
 
                 
         //PenaltyC.PrintTeamErrors();
         
        PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
-        
+       //System.out.println("extraMatches: " + InitializeList.extraMatches.size());
+       //System.out.println("lockedMatches: " + InitializeList.lockedMatches.size());
     }
 }
