@@ -6,7 +6,9 @@ Tällähetkellä pyritään asettamaan 15 joukkuetta 36 kierrokselle (210 peliä
 Pohdintoja:
 - Pitääkö pitää kirjaa siitä mille joukkueelle on sallittu poissaolo ja millä kierroksella?
 
-Lisäpelit ja pelien lukituksen toteutukset löytyy initializeList.java:sta mutta en ole ottanut niitä vielä käyttöön ennenkuin saadaan noi joukkueet asettumaan kierroksille. 
+~~Lisäpelit ja pelien lukituksen toteutukset löytyy initializeList.java:sta mutta en ole ottanut niitä vielä käyttöön ennenkuin saadaan noi joukkueet asettumaan kierroksille.~~
+
+Lukitut-, lisä- ja lukitutlisäpelit asettuvat nyt alustuksessa. **Yksi lisäpeli on lukittu kahdelle eri kierrokselle eli se nostaa kokonaiskierroslukumäärää yhdellä 226:n**
 
 Vieras- ja kotiestojen toteutus uupuu edelleen.
 
