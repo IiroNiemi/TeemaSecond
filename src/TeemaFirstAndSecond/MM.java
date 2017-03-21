@@ -15,10 +15,15 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class MM {
     
+    public static int[][] homeTeamLock = {{0,2},{0,13},{0,14},{0,15},{0,16},{5,34},{8,27},{9,25},{11,1},{11,19},{11,28},{11,30},{13,1},{13,9},{13,24},{13,25},{13,30},{14,7},{14,9},{14,25},{0,8},{4,8},{5,8},{7,8},{8,8},{10,8},{12,8},{13,8},{0,11},{4,11},{5,11},{7,11},{8,11},{10,11},{12,11},{13,11},{0,20},{4,20},{5,20},{7,20},{8,20},{10,20},{12,20},{13,20},{0,32},{4,32},{5,32},{7,32},{8,32},{10,32},{12,32},{13,32},{0,35},{4,35},{5,35},{7,35},{8,35},{10,35},{12,35},{13,35}};
+    public static int[][] visitTeamLock = {{0,8},{4,8},{5,8},{7,8},{8,8},{10,8},{12,8},{13,8},{0,11},{4,11},{5,11},{7,11},{8,11},{10,11},{12,11},{13,11},{0,20},{4,20},{5,20},{7,20},{8,20},{10,20},{12,20},{13,20}};
+    
+    
     public static Random r = new Random();
     //Tabulista, näitä otteluita ei siirretä hetkeen, koska niitä sovitettiin juuri!
-    public static LinkedBlockingDeque TabuL = new LinkedBlockingDeque(1); 
-
+    public static LinkedBlockingDeque TabuL = new LinkedBlockingDeque(2); 
+    public static int[][] oddTeams = new int[36][1];
+    
     public static void swapMatch(){
         int randomRound = r.nextInt(ROUNDS);
         while(roundStack[randomRound].size() <= 1){
@@ -37,7 +42,7 @@ public class MM {
             RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
         }
         
-        //otetaan kopio ottelusta, jotta voidaan poistaa tarvittaessa se listalta jos sille löytyy parempi paikka.
+        //otetaan kopio ottelusta, jotta voidaan poistaa tarvittaessa se listalta, jos sille löytyy parempi paikka.
         Match RMcopy = new Match(RM.getHome(),RM.getVisitor(),RM.getGameDate(),RM.getRound()); 
      
         /* Aiheutuuko pelistä enemmän virheitä kierroksella vai ei */
@@ -74,7 +79,7 @@ public class MM {
         }
 
         /* Tärkeä kohta; ennenkuin vastaus sovituksesta palautetaan, 
-        tarkastetaan muuttuiko virhetilanne jos muuttui niin oliko se parempaan suuntaan */
+        tarkastetaan muuttuiko virhetilanne, jos muuttui niin oliko se parempaan suuntaan */
         if(findplace.getRound() == roundCandidate){
             succed = false;
         } else if(getRoundPenaltyIfThisMatchIsSetHere(roundCandidate,findplace) < PenaltyC.getAllTeamsRoundPenalty(roundCandidate)) {
@@ -117,10 +122,12 @@ public class MM {
             
             if(Collections.frequency(RoundTeams, j) == 1){ //Löytyi kerran, kaikki ok!
             } else {
-                //allowpenalty sallii yhden joukkueelle yhden poissaolon per kierros!
+                //allowpenalty sallii yhden joukkueelle yhden poissaolon per kierros!                              
                 if(oddTeamNoPenalty == true){
                     if(Collections.frequency(RoundTeams, j) == 0){  
                         oddTeamNoPenalty = false; //Yksi poissaolo armahdettu
+                        oddTeams[round][0] = j;
+                       
                     } else {
                         newErrors += Collections.frequency(RoundTeams, j) - 1;
                     }
@@ -137,8 +144,116 @@ public class MM {
         return newErrors;
     }
     
+    public static void ArrangeHomeAndVisitLocks(){
+        List RoundMatches = new ArrayList();
+        List ListOfHomeLocks = new ArrayList();
+        List ListOfVisitLocks = new ArrayList();
+        
+        ArrayList[] BothLocks = PenaltyC.GetHomeAndVisitPrevents(); //hakee ottelut joissa on koti- ja vierasestoja
+        ListOfHomeLocks.addAll(BothLocks[0]); //Asetetaan listoihin
+        ListOfVisitLocks.addAll(BothLocks[1]); 
 
+        
+        
+        
+        while(BothLocks[0].size() > 0 || BothLocks[1].size() > 0){
+            
+            ListOfHomeLocks.addAll(BothLocks[0]); //Päivitetään tilanne, kutsu löytyy lopusta
+            ListOfVisitLocks.addAll(BothLocks[1]);
+            
+            //ensin koitetaan löytää paikka kotiestopeleille
+            for (int i = 0; i < roundStack.length; i++) {
+                RoundMatches.addAll(roundStack[i]);
+                for (int j = 0; j < RoundMatches.size(); j++) {
+                    Match MO = (Match) RoundMatches.get(j);
+                    Match newMO = new Match(MO.getHome(), MO.getVisitor(), MO.getGameDate(),MO.getRound()); //Kopio kierroksen ottelusta, ettei viittaa samaan muistialueeseen        
+                    for (int k = 0; k < ListOfHomeLocks.size(); k++) {
+                        Match LM = (Match)ListOfHomeLocks.get(k);
+                        while(newMO.getHome() == LM.getHome() && newMO.getRound() == LM.getRound()){
+                            newMO.setRound(r.nextInt(ROUNDS));
+                        }
+                    }
+                    if(MO.getRound() != newMO.getRound() ){
+                        roundStack[newMO.getRound()].add(newMO);
+                        roundStack[i].remove(MO);    
+                    } else { }
+                }
+                RoundMatches.clear();
+            }
+            
+            //Sitten sama vieraspeleille
+            for (int i = 0; i < roundStack.length; i++) {
+                RoundMatches.addAll(roundStack[i]);
+                for (int j = 0; j < RoundMatches.size(); j++) {
+                    Match MO = (Match) RoundMatches.get(j);
+                    Match newMO = new Match(MO.getHome(), MO.getVisitor(), MO.getGameDate(),MO.getRound());      
+                    for (int k = 0; k < ListOfVisitLocks.size(); k++) {
+                        Match LM = (Match)ListOfVisitLocks.get(k);
+                        while(newMO.getHome() == LM.getHome() && newMO.getRound() == LM.getRound()){
+                            newMO.setRound(r.nextInt(ROUNDS));
+                        }
+                    }
+                    if(MO.getRound() != newMO.getRound() /*&& roundStack[i].size() > 1*/){ //<-------------tähän joku viritys ettei ota kaikkia?
+                        roundStack[newMO.getRound()].add(newMO);
+                        roundStack[i].remove(MO);    
+                    } else { }
+                }
+                RoundMatches.clear();
+            }
+            
+        
+            BothLocks = PenaltyC.GetHomeAndVisitPrevents(); //Katsotaan tilanne
+            ListOfHomeLocks.clear();
+            ListOfVisitLocks.clear();
+            //System.out.println("kotiestoja: " + BothLocks[0].size());
+            //System.out.println("vierasestoja: " + BothLocks[1].size());
+        }
+        
+        PenaltyC.PrintHomePrevents();
+        System.out.println("stop" );
+        
+
+        
+        
+    }
     
+    //Nää vois olla periaatteessa sama objekti, mutta toistaiseksi pidän erillään selkeyden vuoksi.
+    public static class homeLock{
+        int team;
+        int round;
+        
+        public int getTeam() {
+            return team;
+        }
+
+        public int getRound() {
+            return round;
+        }
+
+        public homeLock(int team, int round){
+            this.team = team;
+            this.round = round;
+        }
+    }
+    public static class visitLock{
+        int team;
+        int round;
+        
+        public int getTeam() {
+            return team;
+        }
+
+        public int getRound() {
+            return round;
+        }
+
+        public visitLock(int team, int round){
+            this.team = team;
+            this.round = round;
+        }
+    }
     
 
 }
+
+

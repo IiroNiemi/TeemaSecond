@@ -1,5 +1,7 @@
 package TeemaFirstAndSecond;
 
+import static TeemaFirstAndSecond.MM.homeTeamLock;
+import static TeemaFirstAndSecond.MM.visitTeamLock;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
 import static TeemaFirstAndSecond.TeemaFAS.TeamPenalty;
@@ -116,7 +118,7 @@ public class PenaltyC {
     }
     
     public static int getLeastMatchesRound(){
-        int tempSize = 91;
+        int tempSize = 226;
         int loser = 0;
         
         for (int i = 0; i < roundStack.length; i++) {
@@ -143,7 +145,31 @@ public class PenaltyC {
         return sum;
     }
     
-//---- HELPERS ---
+    public static int getRoundSize(int round){
+        int roundSize = 0;
+        for (int i = 0; i < roundStack.length; i++) {
+            
+            if(i == round){
+                roundSize = roundStack[i].size();
+            }
+        }
+        return roundSize;
+    }
+    
+    public static int getAllMatchesCount(){
+        int sum = 0;
+        for (Object singleRound : roundStack) { 
+            ArrayList RList = (ArrayList)singleRound;
+            for (Object RList1 : RList) {
+                Match MO = (Match) RList1;
+                sum++;
+            
+            }
+        }
+        return sum;
+    }
+    
+//---- PRINTERS ---
     public static void PrintTeamErrors(){
         System.out.println("TeamPenalty:"); //Listataan joukkueiden virheet
         int team = 0;
@@ -177,16 +203,84 @@ public class PenaltyC {
                 
         System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
     }
-    public static void PrintRoundStackMatches(){
-        //Tulostaa kaikki joukkueet, 540 kappaletta 15 ottelijalla
-        int sum = 0;
-        for (Object singleRound : roundStack) { 
-            ArrayList RList = (ArrayList)singleRound;
-            for (Object SingleMatch : RList) {
-                    sum++;
-            }
+    
+    public static ArrayList[] GetHomeAndVisitPrevents(){
+        /*Tämä toteutus toimii virheenlaskentana, eli täällä ei muuteta mitään, palautetaan ainoastaan lista virheellisistä otteluista */
+        List RoundMatches = new ArrayList();
+        List ListOfHomeLocks = new ArrayList();
+        List ListOfVisitLocks = new ArrayList();
+        
+        ArrayList[] retval = new ArrayList[2];
+        retval[0] = new ArrayList();
+        retval[1] = new ArrayList();
+        
+        //Olioistetaan koti ja vieras listoihin, homeTeamLock ja visitTeamLock ovat globaaleja jotka löytyvät MM.java:sta
+        for (int[] homeTeamLock1 : homeTeamLock) {
+            MM.homeLock HL = new MM.homeLock(homeTeamLock1[0], homeTeamLock1[1]);
+            ListOfHomeLocks.add(HL);
         }
-        System.out.println(sum);
+        for (int[] visitTeamLock1 : visitTeamLock) {
+            MM.visitLock HL = new MM.visitLock(visitTeamLock1[0], visitTeamLock1[1]);
+            ListOfVisitLocks.add(HL);
+        }
+        
+        //hakee/tulostaa kaikki kotiestot
+        for (int i = 0; i < roundStack.length; i++) {
+            RoundMatches.addAll(roundStack[i]);
+            for (int j = 0; j < RoundMatches.size(); j++) {
+                Match MO = (Match) RoundMatches.get(j);
+                for (int k = 0; k < ListOfHomeLocks.size(); k++) {
+                    MM.homeLock HL = (MM.homeLock)ListOfHomeLocks.get(k);
+                    if(MO.getHome() == HL.getTeam() && MO.getRound() == HL.getRound()){
+                        //System.out.println("kotiesto: " + MO.getHome() + " Kierroksella: " + MO.getRound());
+                        retval[0].add(MO);
+                    }   
+                }
+            }
+            RoundMatches.clear();
+        }
+        
+        //Vierasestot
+        for (int i = 0; i < roundStack.length; i++) {
+            RoundMatches.addAll(roundStack[i]);
+            for (int j = 0; j < RoundMatches.size(); j++) {
+                Match MO = (Match) RoundMatches.get(j);
+                for (int k = 0; k < ListOfVisitLocks.size(); k++) {
+                    MM.visitLock VL = (MM.visitLock)ListOfVisitLocks.get(k);
+                    if(MO.getVisitor()== VL.getTeam() && MO.getRound() == VL.getRound()){
+                        //System.out.println("Vierasesto: " + MO.getVisitor() + " Kierroksella: " + MO.getRound());
+                        retval[1].add(MO);
+                    }
+                }
+            }
+            RoundMatches.clear();
+        }
+
+        return retval;
+    }
+    
+    public static void PrintHomePrevents(){ //Tulostaa kaikki kotiestot
+        List RoundMatches = new ArrayList();
+        List ListOfHomeLocks = new ArrayList();
+        for (int[] homeTeamLock1 : homeTeamLock) {
+            MM.homeLock HL = new MM.homeLock(homeTeamLock1[0], homeTeamLock1[1]);
+            ListOfHomeLocks.add(HL);
+        }
+        
+        for (int i = 0; i < roundStack.length; i++) {
+            RoundMatches.addAll(roundStack[i]);
+            for (int j = 0; j < RoundMatches.size(); j++) {
+                Match MO = (Match) RoundMatches.get(j);
+                for (int k = 0; k < ListOfHomeLocks.size(); k++) {
+                    MM.homeLock HL = (MM.homeLock)ListOfHomeLocks.get(k);
+                    if(MO.getHome() == HL.getTeam() && MO.getRound() == HL.getRound()){
+                        System.out.println("kotiesto: " + MO.getHome() + " Kierroksella: " + MO.getRound());
+                        
+                    }   
+                }
+            }
+            RoundMatches.clear();
+        }
     }
 }
     

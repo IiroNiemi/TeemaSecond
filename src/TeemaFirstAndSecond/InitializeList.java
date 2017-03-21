@@ -3,14 +3,9 @@ package TeemaFirstAndSecond;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -107,9 +102,9 @@ public class InitializeList {
         //Lisätään vapaat lisäpelit listaan
         for (int i = 0; i < extraMatches.size(); i++) {
             Match Ematch = (Match)extraMatches.get(i);
-            for (int k = 0; k < retval.size(); k++) { //katsotaan ettei peli osu kahteen kertaan samalle kierrokselle
+            for (int k = 0; k < retval.size(); k++) { 
                 Match MO = (Match)retval.get(k);
-                while(MO.equals(Ematch) && MO.getRound() == Ematch.getRound()){
+                while(MO.equals(Ematch) && MO.getRound() == Ematch.getRound()){ //katsotaan ettei peli osu kahteen kertaan samalle kierrokselle
                     Ematch.setRound(r.nextInt(ROUNDS));
                 }    
             }
