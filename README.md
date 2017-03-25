@@ -4,6 +4,7 @@ Teema 2:n kehitys
 Tällähetkellä pyritään asettamaan 15 joukkuetta 36 kierrokselle (210 peliä). Tämänhetkinen toteutus sallii yhden joukkueen poissaolon kierrokselta, mutta tästähuolimatta virheitä esiintyy edelleen. 
 
 **Major update:**
+
 Keskustelu Kynkään kanssa selvensi toteutusta huomattavasti ja aloin toteuttamaan "siirtoketju- funktiota" (_MM.BeginMoveChain_). Tämä funktio tekee 5-10 hyppyä, missä tutkitaan aiheutuneita kierrosvirheitä ja valitaan kierrokselta huonoiten sopiva ottelu seuraavaan hyppyyn. Kun hypyt loppuvat niin valitaan taas satunnainen ottelu mistä aloitetaan uusi siirtoketju
 
 _Vieras ja kotiestoista on nyt ensimmäinen toteutus MM.ArrangeHomeAndVisitLocks(); ei kunnioita lukituksia, mutta toimii siitä huolimatta oudon hyvin, imaisee tosin vierasestojen kierrokset tyhjäksi/vähiin._
@@ -23,6 +24,7 @@ Jos haluat ajaa Teema 1:n niin:
 
 
 **Tehtävä - Jari Kyngäs**
+
 Sisältö ja ohjeita
 
 Kurssilla koodataan otteluohjelman tekevä algoritmi. Tärkeintä on oppia tämän tyyppisen algoritmin rakennusperiaatteet: ongelman kuvaus (miten asia esitetään ohjelmallisesti), perusratkaisu (ratkaisun etsimisen periaatteet), ratkaisun hyvyyden arviointi (kustannus-funktion määrittely), rajoitteet (mitä optimoidaan), rajoitteiden sisältöjen päivittäminen...
