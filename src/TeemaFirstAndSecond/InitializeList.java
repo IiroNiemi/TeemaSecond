@@ -67,22 +67,27 @@ public class InitializeList {
         }
         
         //Erotellaan lukitut lisäpelit (Lisätään myöhemmin)
-        
+        /*
         for (int i = 0; i < lockedMatches.size(); i++) {  
             Match MO = (Match)lockedMatches.get(i);
             if( Collections.frequency(lockedMatches, MO) >= 2){ //Lukittu lisäpeli esiintyy kaksi kertaa!
                 MO.setLockedToRow(true);
                 lockedextraMatches.add(MO);
                 extraMatches.remove(MO);
+                if(Collections.frequency(lockedMatches, MO) >= 2){ //Lukittu lisäpeli esiintyy kaksi kertaa!
+                    retval.remove(MO);
+                }
             } else if(Collections.frequency(extraMatches, MO) > 0 ){
                 MO.setLockedToRow(true); //Peli löytyi lukittavista, lukitaan heti.
                 lockedextraMatches.add(MO);
                 extraMatches.remove(MO);
             }   
         }
+        */
         
         //Lukitaan loput pelit ja asetetaan oikea kierros
         //ei saa lukita lisäpelejä tässä kohtaa vielä!
+        /*
         for (int i = 0; i < retval.size(); i++) {
             Match MO = (Match) retval.get(i);
             for (int j = 0; j < lockedMatches.size(); j++) {
@@ -98,8 +103,10 @@ public class InitializeList {
                    
             }
         }
+        */
         
         //Lisätään vapaat lisäpelit listaan
+        /*
         for (int i = 0; i < extraMatches.size(); i++) {
             Match Ematch = (Match)extraMatches.get(i);
             for (int k = 0; k < retval.size(); k++) { 
@@ -110,9 +117,9 @@ public class InitializeList {
             }
             retval.add(Ematch);
         }
-        
+        */
         //LISÄTÄÄN LUKITUT LISÄPELIT, yksi lisäpeli on lukittu kahteen kertaan mikä nostaa kokonaislukumäärän 226 peliin
-        retval.addAll(lockedextraMatches); 
+        //retval.addAll(lockedextraMatches); 
         
         //lisätään peleille päivämäärät listalta ja asetetaan lista peleistä tietorakenteeseen roundStack[ROUNDS]
         for (int i = 0; i < roundStack.length; i++) {

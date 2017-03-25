@@ -1,10 +1,12 @@
 package TeemaFirstAndSecond;
 
+import static TeemaFirstAndSecond.InitializeList.AllGameDates;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -20,11 +22,34 @@ public class MM {
     
     
     public static Random r = new Random();
-    //Tabulista, näitä otteluita ei siirretä hetkeen, koska niitä sovitettiin juuri!
-    public static LinkedBlockingDeque TabuL = new LinkedBlockingDeque(2); 
-    public static int[][] oddTeams = new int[36][1];
+    public static TabuList TabuL = new TabuList();
+    
+    
     
     public static void swapMatch(){
+        LinkedBlockingDeque L = TabuL.getTabuL();
+        /*
+        Match dummy = new Match(1,2,null,10);
+        Match wrong = new Match(5,6,null,10);
+        
+        TabuL.addMatch(new Tabu(dummy,5));
+        TabuL.addMatch(new Tabu(dummy,6));
+        TabuL.addMatch(new Tabu(dummy,7));
+
+        
+        ArrayList history = TabuL.getAllMatcheRounds(dummy);
+        
+        dummy.setRound(5); //Arvottiin historiassa oleva kierros
+        
+        while(history.contains(dummy.getRound())){
+            dummy.setRound(r.nextInt(ROUNDS));
+        }
+        
+        System.out.println("stop");
+        */
+        
+        
+
         int randomRound = r.nextInt(ROUNDS);
         while(roundStack[randomRound].size() <= 1){
             randomRound = r.nextInt(ROUNDS);
@@ -33,7 +58,9 @@ public class MM {
         
         Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
         
-        while(TabuL.contains(RM) || RM.isLockedToRow()){ //Jos peli löytyy tabulistalta, arvotaan kokonaan uusi niin kauan kunnes löytyy uusi peli
+        ArrayList history = TabuL.getAllMatcheRounds(RM); //hakee ottelun historian, eli mihin kierroksille sitä on jo sovitettu
+
+        while(history.contains(RM.getRound()) || RM.isLockedToRow()){ //Jos peli löytyy tabulistalta, arvotaan kokonaan uusi niin kauan kunnes löytyy uusi peli
             randomRound = r.nextInt(ROUNDS);
             while(roundStack[randomRound].size() <= 1){
                 randomRound = r.nextInt(ROUNDS);
@@ -45,19 +72,140 @@ public class MM {
         //otetaan kopio ottelusta, jotta voidaan poistaa tarvittaessa se listalta, jos sille löytyy parempi paikka.
         Match RMcopy = new Match(RM.getHome(),RM.getVisitor(),RM.getGameDate(),RM.getRound()); 
      
-        /* Aiheutuuko pelistä enemmän virheitä kierroksella vai ei */
-        if(compareMatchPenaltyToOtherRoundsAndTryToSet(RM)){
+        
+        
+        /* Koitetaan siirtää peliä satunnaiselle kierrokselle ja tutkitaan 
+        aiheutuuko ennemmän vai vähemmän virheitä kuin sieltä kierrokselta mistä lähdettiin*/
+        if(Move(RM)){
+            TabuL.addMatch(new Tabu(RM,RMcopy.getRound()));
             roundStack[randomRound].remove(RMcopy);
+
         } else {   
-            if(TabuL.size() == 1){
-                TabuL.removeFirst();
-            }
-            TabuL.addLast(RMcopy);   
+           TabuL.addMatch(new Tabu(RM,RMcopy.getRound()));
         }
+        
+        
     }
     
+    
+    public static void BeginMoveChain(int jumps){
+        
+        for (int i = 0; i < jumps; i++) {
+            if(i == 0){
+                int randomRound = r.nextInt(ROUNDS);
+                while(roundStack[randomRound].size() <= 1){
+                    randomRound = r.nextInt(ROUNDS);
+                }
+                int roundLength = roundStack[randomRound].size();
+
+                Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+                Jump(RM);
+            } else {
+                Jump();
+            }
+            
+        }
+
+    }
+    
+    public static Match goingMatch = null; //Jatkossa tutkittava ottelu ladataan tähän
+
+    public static void Jump(Match Begin){
+        ArrayList candidates = getRoundCandidates(Begin);//hakee kierrokset missä penalty määrä on pienin, jos löytyy useampi yhtä pieni, niin niistä arvotaan mihin mennään.
+        int numofcands = candidates.size();
+        roundCand RC = null;
+        
+        if(numofcands > 1){
+            RC = (roundCand)candidates.get(r.nextInt(numofcands)); //arvotaan mikä otetaan
+        } else if (numofcands == 1){
+            RC = (roundCand)candidates.get(numofcands-1); //eka
+        }
+        
+        Match JumpFinished = new Match(Begin.getHome(), Begin.getVisitor(), RC.getRoundDate(), RC.getRoundcand());
+        TabuL.addMatch(new Tabu(Begin,RC.getRoundcand()));
+        roundStack[Begin.getRound()].remove(Begin);
+        roundStack[RC.roundcand].add(JumpFinished);
+        
+        
+        //mikä kierroksen otteluista aiheuttaa eniten virheitä kierroksella?
+        Match[] test = PenaltyC.getRoundMatchWhichCausesMostPenalty(0);
+        
+        
+        
+        int[] smallPenaltyCandMatch = getEqualpenaltyFromCand(candidates);
+        
+        ArrayList RoundMatchList = getMatchesWithEqualCausePenalty(candidates); //Arpoo ehdokkaista kierroksen ja palauttaa kierroksen ottelut.
+        
+        //tähän väliin ottelun asettaminen kierrokselle?
+        
+        /*Tässä välissä pitää laskea mikä kierroksen otteluista aiheuttaa eniten virheitä kierroksella ja palauttaa lista jos löytyy useampi ottelu mikä aiheuttaa samanverran. 
+        Jos palauttaa listan niin sillon arvotaan taas ottelu mitä lähdetään sovittamaan.*/
+        
+
+        goingMatch = (Match)RoundMatchList.get(r.nextInt(RoundMatchList.size()));
+        
+        //Nyt tämän jälkeen käydään taas kaikki ottelut läpi uudella matsilla (rM)
+        
+    }
+    public static void Jump(){
+        
+    }
+    
+    
+    /*Ongelmana on nyt se että jos sovitettava ottelu aiheuttaa nolla virhettä kierroksella, 
+    niin sen huomioiminen on vaikeaa int[] tietorakenteessa.
+    Tarkoitus on toteuttaa tietorakenne, josta käy myös ilmi nollavirhetilanteet. */
+    public static ArrayList getRoundCandidates(Match Begin){
+        ArrayList retval = new ArrayList();
+        roundCand RC = null;
+        //int lastWinner = 0;
+        
+        //Etsii pienimmän virhemääräisen kierroksen.
+        int minValue = getRoundPenaltyIfThisMatchIsSetHere(r.nextInt(ROUNDS),Begin);
+        for (int i = 1; i < ROUNDS; i++) {
+            int temp = getRoundPenaltyIfThisMatchIsSetHere(i,Begin);
+            if (temp < minValue) {
+                minValue = temp;
+            }
+        }
+
+        //Kerää kaikki tällä virhemäärällä olevat kierrokset.
+        for (int i = 0; i < ROUNDS; i++) { 
+            int newPenalty = getRoundPenaltyIfThisMatchIsSetHere(i,Begin); //otetaan ylös virhetilanne jokaiselta kierrokselta
+            int oldPenalty = PenaltyC.getAllTeamsRoundPenalty(i); //Hakee kierroksen virheet ilman sovitettavaa ottelua
+
+            if(newPenalty <= minValue && newPenalty <= oldPenalty){
+                minValue = newPenalty;
+                RC = new roundCand(i, newPenalty,AllGameDates[i]);
+                retval.add(RC);
+            }
+        }
+        //Testitulostus jos löytyy nollavirheeksi muuttuvia kierroksia
+        for (Object cand : retval) {
+            roundCand tRC = (roundCand)cand;
+            if(tRC.causedpenalty == 0) System.out.println(+ tRC.roundcand + " " + tRC.causedpenalty);
+        }
+        return retval;
+    }
+
+
+    
+
+    
+    
+    public static ArrayList getMatchesWithEqualCausePenalty(int[] candidates){
+        ArrayList retval = new ArrayList();
+        
+        return retval;
+    }
+    
+    
+    
+    
+    
+    
     /* Seuraava toteutus ottaa arvotusta ohjelmasta yhden ottelun ja tarkastelee aiheuttaako se lisävirheitä vai ei */
-    public static boolean compareMatchPenaltyToOtherRoundsAndTryToSet(Match findplace){
+    public static boolean Move(Match findplace){
         boolean succed = false;
         int roundCandidate = 0;
         int lastWinner = 0;
@@ -120,14 +268,13 @@ public class MM {
         /*Lasketaan virhetilanne sovituksen jälkeen */
         for (int j = 0; j < TEAMS; j++) { //Käydään kaikki joukkueet läpi
             
-            if(Collections.frequency(RoundTeams, j) == 1){ //Löytyi kerran, kaikki ok!
+            if(Collections.frequency(RoundTeams, j) == 1){ 
+                //Löytyi kerran, kaikki ok!
             } else {
                 //allowpenalty sallii yhden joukkueelle yhden poissaolon per kierros!                              
                 if(oddTeamNoPenalty == true){
                     if(Collections.frequency(RoundTeams, j) == 0){  
                         oddTeamNoPenalty = false; //Yksi poissaolo armahdettu
-                        oddTeams[round][0] = j;
-                       
                     } else {
                         newErrors += Collections.frequency(RoundTeams, j) - 1;
                     }
@@ -149,6 +296,7 @@ public class MM {
         List ListOfHomeLocks = new ArrayList();
         List ListOfVisitLocks = new ArrayList();
         
+        
         ArrayList[] BothLocks = PenaltyC.GetHomeAndVisitPrevents(); //hakee ottelut joissa on koti- ja vierasestoja
         ListOfHomeLocks.addAll(BothLocks[0]); //Asetetaan listoihin
         ListOfVisitLocks.addAll(BothLocks[1]); 
@@ -158,7 +306,7 @@ public class MM {
         
         while(BothLocks[0].size() > 0 || BothLocks[1].size() > 0){
             
-            ListOfHomeLocks.addAll(BothLocks[0]); //Päivitetään tilanne, kutsu löytyy lopusta
+            ListOfHomeLocks.addAll(BothLocks[0]); //Päivitetään tilanne
             ListOfVisitLocks.addAll(BothLocks[1]);
             
             //ensin koitetaan löytää paikka kotiestopeleille
@@ -189,14 +337,18 @@ public class MM {
                     Match newMO = new Match(MO.getHome(), MO.getVisitor(), MO.getGameDate(),MO.getRound());      
                     for (int k = 0; k < ListOfVisitLocks.size(); k++) {
                         Match LM = (Match)ListOfVisitLocks.get(k);
-                        while(newMO.getHome() == LM.getHome() && newMO.getRound() == LM.getRound()){
+                        newMO.setRound(r.nextInt(ROUNDS));
+                        while(newMO.getHome() == LM.getHome() && newMO.getRound() == LM.getRound() ){ //tähän joku viritys ettei ota kaikkia?
                             newMO.setRound(r.nextInt(ROUNDS));
                         }
                     }
-                    if(MO.getRound() != newMO.getRound() /*&& roundStack[i].size() > 1*/){ //<-------------tähän joku viritys ettei ota kaikkia?
+                    
+                    if(MO.getRound() != newMO.getRound() /*&& roundStack[i].size() >= 1*/){ //???????
                         roundStack[newMO.getRound()].add(newMO);
                         roundStack[i].remove(MO);    
-                    } else { }
+                    } else {
+                        //System.out.println("tuleeko tänne koskaan?");
+                    }
                 }
                 RoundMatches.clear();
             }
@@ -210,10 +362,6 @@ public class MM {
         }
         
         PenaltyC.PrintHomePrevents();
-        System.out.println("stop" );
-        
-
-        
         
     }
     
@@ -253,6 +401,41 @@ public class MM {
         }
     }
     
+
+}
+
+/* tietorakenne kierrosehdokkaiden säilömiseen. 
+Sisältää kierrosehdokkaan ja ottelun aiheuttamat virheet tällä kierroksella. */
+class roundCand{
+    int roundcand;
+    Date roundDate;
+    int causedpenalty;
+    
+    public roundCand(int RC, int CP, Date RD){
+        roundcand = RC;
+        causedpenalty = CP;
+        roundDate = RD;
+    }
+    
+    public int getRoundcand() {
+        return roundcand;
+    }
+    public int getCausedpenalty() {
+        return causedpenalty;
+    }
+    public Date getRoundDate() {
+        return roundDate;
+    }
+    
+    public void setRoundcand(int roundcand) {
+        this.roundcand = roundcand;
+    }
+    public void setCausedpenalty(int causedpenalty) {
+        this.causedpenalty = causedpenalty;
+    }
+    public void setRoundDate(Date roundDate) {
+        this.roundDate = roundDate;
+    }
 
 }
 

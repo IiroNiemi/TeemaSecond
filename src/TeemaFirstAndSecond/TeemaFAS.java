@@ -19,30 +19,30 @@ public class TeemaFAS {
         
 
         System.out.println("Hakee...");
-        //while(PenaltyC.getOverallPenalty() > 150){
-            //InitializeList.StartList(); //arpoo uuden listan
+        //while(PenaltyC.getOverallPenalty() > 0){
+        //    InitializeList.StartList(); //arpoo uuden listan
             
             //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
-            for (int i = 0; i < 1000; i++) {        
+            //for (int i = 0; i < 1000; i++) {        
         
                 PenaltyC.countTeamPenalty();
-                /*ei kunnioita lukittuja pelejä, imaisee vierasestojen kierrokset tyhjäksi, tarvii hiomista vielä.*/
-                MM.ArrangeHomeAndVisitLocks(); 
-                MM.swapMatch();  
                 
+                //MM.ArrangeHomeAndVisitLocks(); 
+                //MM.swapMatch();  
+                MM.BeginMoveChain(5);
                 
-                System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+                //System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
                 
-            }
+            //}
             
             
-            if(PenaltyC.getOverallPenalty() < 150) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+            if(PenaltyC.getOverallPenalty() < 200) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         //}
+        
         
             
        PenaltyC.countTeamPenalty();         
         //PenaltyC.PrintTeamErrors();
-       //int[][] i = MM.oddTeams; //Parittomat joukkueet, koitan keksiä vielä käyttöä näille.
        
        PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
        System.out.println("stop!");

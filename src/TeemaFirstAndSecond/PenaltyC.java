@@ -67,6 +67,15 @@ public class PenaltyC {
         }   
     }
     
+    public static Match[] getRoundMatchWhichCausesMostPenalty(int round){
+        Match[] retval = new Match[10];
+        Match MO = new Match(1,2,null,3);
+        
+        retval[0] = MO;
+        
+        return retval;
+    }
+    
     public static int getTeamTotalPenalty(int team){
         int sum = 0;
         
@@ -169,40 +178,7 @@ public class PenaltyC {
         return sum;
     }
     
-//---- PRINTERS ---
-    public static void PrintTeamErrors(){
-        System.out.println("TeamPenalty:"); //Listataan joukkueiden virheet
-        int team = 0;
-        int round = 0;
-        for (int[] TeamRound : TeamPenalty) {
-            System.out.println("Team: "+team);
-            for (int U : TeamRound) {
-                System.out.print(round + "# ");
-                System.out.println(U);
-                round++;
-            }
-            System.out.println();
-            team++;
-            round = 0;
-        }
-    }
-    public static void PrintMatchList(){ //Ohjelman tulostus
-        int sum = 0;
-        int lockCount = 0;
-        System.out.println("# " + "K - V" + " PVM " );
-        for (Object singleRound : roundStack) { 
-            ArrayList RList = (ArrayList)singleRound;
-            for (Object RList1 : RList) {
-                Match MO = (Match) RList1;
-                System.out.println( MO.toString());
-                if(MO.isLockedToRow()== true) lockCount++;
-                sum++;
-            
-            }
-        }
-                
-        System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
-    }
+
     
     public static ArrayList[] GetHomeAndVisitPrevents(){
         /*Tämä toteutus toimii virheenlaskentana, eli täällä ei muuteta mitään, palautetaan ainoastaan lista virheellisistä otteluista */
@@ -257,6 +233,40 @@ public class PenaltyC {
         }
 
         return retval;
+    }
+    //---- PRINTERS ---
+    public static void PrintTeamErrors(){
+        System.out.println("TeamPenalty:"); //Listataan joukkueiden virheet
+        int team = 0;
+        int round = 0;
+        for (int[] TeamRound : TeamPenalty) {
+            System.out.println("Team: "+team);
+            for (int U : TeamRound) {
+                System.out.print(round + "# ");
+                System.out.println(U);
+                round++;
+            }
+            System.out.println();
+            team++;
+            round = 0;
+        }
+    }
+    public static void PrintMatchList(){ //Ohjelman tulostus
+        int sum = 0;
+        int lockCount = 0;
+        System.out.println("# " + "K - V" + " PVM " );
+        for (Object singleRound : roundStack) { 
+            ArrayList RList = (ArrayList)singleRound;
+            for (Object RList1 : RList) {
+                Match MO = (Match) RList1;
+                System.out.println( MO.toString());
+                if(MO.isLockedToRow()== true) lockCount++;
+                sum++;
+            
+            }
+        }
+                
+        System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
     }
     
     public static void PrintHomePrevents(){ //Tulostaa kaikki kotiestot
