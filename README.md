@@ -37,13 +37,14 @@ Suorituskelpoisen ohjelman tulee vähintäänkin tulostaa kaikkien virheiden mä
 Opintojaksojen suorittaminen
 Jokainen alla kerrottu vaihe vastaa yhden teeman suorittamista.
 
-- Ohjelma osaa etsiä ratkaisua sen perusteella, että jokaisella joukkueella on tasan yksi peli per kierros. Kierroksia otteluohjelmassa on tässä vaiheessa tasan vaadittava minimimäärä. Joukkueita on oltava 10 kpl. Otteluohjelmassa jokainen joukkue kohtaa jokaisen joukkueen kaksi kertaa. Kyseessä on siis 2RR (Round Robin).
- - Opettajalle on palautettava suorituskelpoinen ohjelma sekä yksi muodostettu otteluohjelma (selkeä tekstitiedosto, jossa on lueteltu kaikki pelit pelipäivineen).
- - Otteluohjelmaan lisätään kierroksia todellisuutta (Liiga, 2016 syksy) vastaava määrä. Joukkuemäärä kasvatetaan 15:een. Otteluohjelmaan lisätään myös rajoitteita, kiinnitettyjä pelejä, vieraskiertueita ja 15 lohkopeliä. Ohjelma osaa etsiä ratkaisua em. seikat huomioon ottaen siten, että jokaisella joukkueella on 0–1 peliä per kierros. Tämä tuo ohjelmaan toisen rajoitteen eli joukkue ei voi pelata kotona, jos sen kotihalli on muussa käytössä. Joukkue ei voi tietenkään pelata vierassakaan, jos sellainen esto on laitettu. Se on kuitenkin käytännössä sama rajoite kuin kotiesto eli sitä ei tarvitse käsitellä mitenkään eri tavalla. Vierasestolla pyritään siihen, että joukkue pelaa kotona tai ei ollenkaan.
+1. Ohjelma osaa etsiä ratkaisua sen perusteella, että jokaisella joukkueella on tasan yksi peli per kierros. Kierroksia otteluohjelmassa on tässä vaiheessa tasan vaadittava minimimäärä. Joukkueita on oltava 10 kpl. Otteluohjelmassa jokainen joukkue kohtaa jokaisen joukkueen kaksi kertaa. Kyseessä on siis 2RR (Round Robin).
+Opettajalle on palautettava suorituskelpoinen ohjelma sekä yksi muodostettu otteluohjelma (selkeä tekstitiedosto, jossa on lueteltu kaikki pelit pelipäivineen).
+2. Otteluohjelmaan lisätään kierroksia todellisuutta (Liiga, 2016 syksy) vastaava määrä. Joukkuemäärä kasvatetaan 15:een. Otteluohjelmaan lisätään myös rajoitteita, kiinnitettyjä pelejä, vieraskiertueita ja 15 lohkopeliä. Ohjelma osaa etsiä ratkaisua em. seikat huomioon ottaen siten, että jokaisella joukkueella on 0–1 peliä per kierros. Tämä tuo ohjelmaan toisen rajoitteen eli joukkue ei voi pelata kotona, jos sen kotihalli on muussa käytössä. Joukkue ei voi tietenkään pelata vierassakaan, jos sellainen esto on laitettu. Se on kuitenkin käytännössä sama rajoite kuin kotiesto eli sitä ei tarvitse käsitellä mitenkään eri tavalla. Vierasestolla pyritään siihen, että joukkue pelaa kotona tai ei ollenkaan.
 
-Kohdan kaksi rajoitteet. Huomauttakaa heti, jos havaitsette datassa minkäänlaista epäselvyyttä.
+Huomauttakaa heti, jos havaitsette datassa minkäänlaista epäselvyyttä.
 Opettajalle on palautettava suorituskelpoinen ohjelma sekä yksi muodostettu otteluohjelma.
-Kohdassa 2 aikaansaatuun ohjelmaan lisätään breakkien minimointi. Opettajalle on palautettava suorituskelpoinen ohjelma sekä yksi muodostettu otteluohjelma. Tämän lisäksi on palautettava koodi, joka laskee ja ylläpitää breakit. Koodi on dokumentoitava hyvin.
+
+3. Kohdassa 2 aikaansaatuun ohjelmaan lisätään breakkien minimointi. Opettajalle on palautettava suorituskelpoinen ohjelma sekä yksi muodostettu otteluohjelma. Tämän lisäksi on palautettava koodi, joka laskee ja ylläpitää breakit. Koodi on dokumentoitava hyvin.
 
 Kohdissa 1 ja 2 on mahdollista aikaansaada täydellinen sarjaohjelma. Se tarkoittaa sitä, että otteluohjelmassa ei ole yhtään rajoitteiden mukaista virhettä. Jokainen joukkue pelaa siis 0–1 kertaa kierroksella sekä koti- ja vierasestot toteutuvat. Ja kaikki kiinnitetyt pelit ovat tietysti kiinnitetyt. Kohtien 1 ja 2 rajoittet ovat hard-rajoitteita eli niiden on aina mentävä nolliksi.
 
