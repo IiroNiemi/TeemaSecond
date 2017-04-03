@@ -4,7 +4,6 @@ package TeemaFirstAndSecond;
 import static TeemaFirstAndSecond.InitializeList.AllGameDates;
 import static TeemaFirstAndSecond.MM.getRandomMatch;
 import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
-import static TeemaFirstAndSecond.MM.r;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
 import java.util.ArrayList;

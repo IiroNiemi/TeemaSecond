@@ -1,8 +1,7 @@
 package TeemaFirstAndSecond;
 
-import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
+
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  *
@@ -37,13 +36,13 @@ public class TeemaFAS {
             }
             
             
-            if(PenaltyC.getOverallPenalty() < 200) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+            
         //}
         
         
             
        PenaltyC.countTeamPenalty();         
-        //PenaltyC.PrintTeamErrors();
+       //PenaltyC.PrintTeamErrors();
        
        PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
        System.out.println("stop!");

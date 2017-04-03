@@ -1,6 +1,6 @@
 package TeemaFirstAndSecond;
 
-import static TeemaFirstAndSecond.MM.TabuL;
+import static TeemaFirstAndSecond.MC.TabuL;
 import static TeemaFirstAndSecond.MM.homeTeamLock;
 import static TeemaFirstAndSecond.MM.visitTeamLock;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
