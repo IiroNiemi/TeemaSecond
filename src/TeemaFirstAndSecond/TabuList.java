@@ -49,7 +49,7 @@ public class TabuList {
     }
 
     void addMatch(Tabu tb) {
-        if(TabuL.size() == 10){
+        if(TabuL.size() == 15){
             TabuL.removeFirst();
         }
         else{

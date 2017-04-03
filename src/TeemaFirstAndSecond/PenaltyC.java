@@ -116,16 +116,18 @@ public class PenaltyC {
                     
             for (int i = 0; i < RoundMatches.size(); i++) {
                 Match MO = (Match)RoundMatches.get(i);
-                if(!TabuL.isInList(MO, round)){
+                if(TabuL.isInList(MO, MO.getRound())){
+
+                } else {
                     MC = new matchCand(MO, round);
                     allroundMatchesAreTabu = false;
                 }
             }
             
-            if(allroundMatchesAreTabu == false){ //palautetaan tyhjä lista jos kaikki on tabulla
+            if(allroundMatchesAreTabu == false){ 
                 retval.add(MC);
             }
-            
+            //palautetaan tyhjä lista jos kaikki on tabulla
 
         } else{
             //Valikoi suurimman
@@ -144,12 +146,6 @@ public class PenaltyC {
                 }
             }
         }
-        
-
-
-
-        
-        
         
         return retval;
     }

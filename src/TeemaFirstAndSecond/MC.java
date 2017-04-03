@@ -25,7 +25,6 @@ public class MC {
     }
     
     public static Match jumpBegin = null; //tätä arvoa päivitetään ekan hypyn jälkeen.
-
     public static void Jump(Match Begin, int jumps){
         
         jumpBegin = new Match(Begin.getHome(), Begin.getVisitor(), Begin.getGameDate(), Begin.getRound());
@@ -35,11 +34,9 @@ public class MC {
             PenaltyC.countTeamPenalty(); //päivitetään virhetilanne joka hypyn jälkeen
             
             
+            
             /*kertoo Paljonko on kierrosvirheet jos tämä asetetaan sinne*/
             ArrayList candidates = getRoundCandidates(jumpBegin);//hakee kierrokset missä penalty määrä on pienin, jos löytyy useampi yhtä pieni, niin niistä arvotaan mihin mennään.
-            
-            
-            
             int numofcands = candidates.size();
             roundCand RC = null;
 
@@ -68,6 +65,9 @@ public class MC {
                     jumpBegin = getRandomMatch();
                 } else if(numofWM == 1){
                     matchCand MC = (matchCand)worstMatches.get(0);
+                    if(TabuL.isInList(MC.getMatch(), MC.getMatch().getRound())){
+                        //System.out.println("worstMatch on tabulla!");
+                    }
                     jumpBegin = (Match) MC.getMatch();
                 } else {
                     matchCand MC = (matchCand)worstMatches.get(r.nextInt(numofWM));
@@ -75,7 +75,8 @@ public class MC {
                 }
                 
             } else {
-                jumpBegin = getRandomMatch();
+                System.out.println("Kandidaatteja tasan nolla");
+                //jumpBegin = getRandomMatch();
             }
             
         
