@@ -49,13 +49,17 @@ public class TabuList {
     }
 
     void addMatch(Tabu tb) {
-        if(TabuL.size() == 300){
+        if(TabuL.size() == 10){
             TabuL.removeFirst();
         }
         else{
             TabuL.add(tb);
         }
         
+    }
+    
+    public int size(){
+        return TabuL.size();
     }
     
     public LinkedBlockingDeque getTabuL() {

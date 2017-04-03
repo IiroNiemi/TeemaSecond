@@ -87,7 +87,7 @@ public class Match implements Comparator<Match>, Comparable<Match>, Cloneable{
     public String toString(){
         String locked = "";
         if(lockedToRow) locked = "LOCKED";
-        String s = Round + "# " + Home + " " + Visitor  + " " + locked  /*+ GameDate*/;
+        String s = Round + "# " + Home + " " + Visitor  + " " + locked /* + GameDate*/;
         return s;
     }
 }

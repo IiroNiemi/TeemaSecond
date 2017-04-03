@@ -1,6 +1,8 @@
 package TeemaFirstAndSecond;
 
+import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -17,23 +19,25 @@ public class TeemaFAS {
         InitializeList.StartList(); //Initializes roundStack List for all rounds in random rounds
         PenaltyC.countTeamPenalty(); //Counts penalty for each team
         
-
+        System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         System.out.println("Hakee...");
+        
         //while(PenaltyC.getOverallPenalty() > 0){
         //    InitializeList.StartList(); //arpoo uuden listan
             
             //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
-            //for (int i = 0; i < 1000; i++) {        
+            for (int i = 0; i < 1000; i++) {        
         
-                PenaltyC.countTeamPenalty();
+                //PenaltyC.countTeamPenalty();
                 
                 //MM.ArrangeHomeAndVisitLocks(); 
                 //MM.swapMatch();  
                 MM.BeginMoveChain(5);
                 
+                
                 //System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
                 
-            //}
+            }
             
             
             if(PenaltyC.getOverallPenalty() < 200) System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());

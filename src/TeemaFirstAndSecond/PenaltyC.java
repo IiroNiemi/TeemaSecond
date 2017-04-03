@@ -1,5 +1,6 @@
 package TeemaFirstAndSecond;
 
+import static TeemaFirstAndSecond.MM.TabuL;
 import static TeemaFirstAndSecond.MM.homeTeamLock;
 import static TeemaFirstAndSecond.MM.visitTeamLock;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -67,11 +69,87 @@ public class PenaltyC {
         }   
     }
     
-    public static Match[] getRoundMatchWhichCausesMostPenalty(int round){
-        Match[] retval = new Match[10];
-        Match MO = new Match(1,2,null,3);
+    public static ArrayList getRoundMatchWhichCausesMostPenalty(int round){
+        Random r = new Random();
+        ArrayList retval = new ArrayList();
+        ArrayList MatchesWithPenalty = new ArrayList();
+        ArrayList RoundMatches = roundStack[round];
+        matchCand mC = null;
         
-        retval[0] = MO;
+        for (int i = 0; i < roundStack.length; i++) {
+            ArrayList roundlist = roundStack[i]; 
+            for (int j = 0; j < roundlist.size(); j++) {
+                Match tempMO = (Match)roundlist.get(j);
+                for (int k = 0; k < RoundMatches.size(); k++) {
+                    Match ndl = (Match)RoundMatches.get(k);
+                    if(i == round && tempMO.getHome() == ndl.getHome() && tempMO.getVisitor() == ndl.getVisitor()){
+                        int firstP = TeamPenalty[tempMO.getHome()][round];
+                        int secondP = TeamPenalty[tempMO.getVisitor()][round];
+                        int mTotalP = firstP + secondP;
+                        if(mTotalP > 0){
+                            mC = new matchCand(ndl,mTotalP);
+                            MatchesWithPenalty.add(mC);
+                        }
+                        
+                    }
+                }    
+            }
+            
+        }
+        
+        //Ei palauteta jos ottelu on tabulistalla
+        for (int i = 0; i < MatchesWithPenalty.size(); i++) {
+            matchCand BmC = (matchCand)MatchesWithPenalty.get(i);
+            Match MO = (Match)BmC.getMatch();
+            for (int j = 0; j < TabuL.size(); j++) {
+                if(TabuL.isInList(MO, MO.getRound())){
+                    MatchesWithPenalty.remove(BmC);
+                }
+            }    
+        }
+        
+        /*Palautetaan tyhjä jos kaikki kierroksen ottelut on tabulistalla*/
+        if(MatchesWithPenalty.isEmpty()){
+            boolean allroundMatchesAreTabu = true; 
+            matchCand MC = null;
+                    
+                    
+            for (int i = 0; i < RoundMatches.size(); i++) {
+                Match MO = (Match)RoundMatches.get(i);
+                if(!TabuL.isInList(MO, round)){
+                    MC = new matchCand(MO, round);
+                    allroundMatchesAreTabu = false;
+                }
+            }
+            
+            if(allroundMatchesAreTabu == false){ //palautetaan tyhjä lista jos kaikki on tabulla
+                retval.add(MC);
+            }
+            
+
+        } else{
+            //Valikoi suurimman
+            int biggest = 0;
+            for (int i = 0; i < MatchesWithPenalty.size(); i++) {
+                matchCand BmC = (matchCand)MatchesWithPenalty.get(i);
+                if(BmC.mPenalty > biggest){
+                    biggest = BmC.getmPenalty();
+                }
+            }
+            //valitaan kaikki yhtäsuuret
+            for (int i = 0; i < MatchesWithPenalty.size(); i++) {
+                matchCand BmC = (matchCand)MatchesWithPenalty.get(i);
+                if(BmC.mPenalty == biggest){
+                    retval.add(BmC);
+                }
+            }
+        }
+        
+
+
+
+        
+        
         
         return retval;
     }
@@ -259,7 +337,7 @@ public class PenaltyC {
             ArrayList RList = (ArrayList)singleRound;
             for (Object RList1 : RList) {
                 Match MO = (Match) RList1;
-                System.out.println( MO.toString());
+                //System.out.println( MO.toString());
                 if(MO.isLockedToRow()== true) lockCount++;
                 sum++;
             

@@ -28,29 +28,8 @@ public class MM {
     
     public static void swapMatch(){
         LinkedBlockingDeque L = TabuL.getTabuL();
-        /*
-        Match dummy = new Match(1,2,null,10);
-        Match wrong = new Match(5,6,null,10);
-        
-        TabuL.addMatch(new Tabu(dummy,5));
-        TabuL.addMatch(new Tabu(dummy,6));
-        TabuL.addMatch(new Tabu(dummy,7));
-
-        
-        ArrayList history = TabuL.getAllMatcheRounds(dummy);
-        
-        dummy.setRound(5); //Arvottiin historiassa oleva kierros
-        
-        while(history.contains(dummy.getRound())){
-            dummy.setRound(r.nextInt(ROUNDS));
-        }
-        
-        System.out.println("stop");
-        */
-        
-        
-
         int randomRound = r.nextInt(ROUNDS);
+        
         while(roundStack[randomRound].size() <= 1){
             randomRound = r.nextInt(ROUNDS);
         }
@@ -86,123 +65,6 @@ public class MM {
         
         
     }
-    
-    
-    public static void BeginMoveChain(int jumps){
-        
-        for (int i = 0; i < jumps; i++) {
-            if(i == 0){
-                int randomRound = r.nextInt(ROUNDS);
-                while(roundStack[randomRound].size() <= 1){
-                    randomRound = r.nextInt(ROUNDS);
-                }
-                int roundLength = roundStack[randomRound].size();
-
-                Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
-                Jump(RM);
-            } else {
-                Jump();
-            }
-            
-        }
-
-    }
-    
-    public static Match goingMatch = null; //Jatkossa tutkittava ottelu ladataan tähän
-
-    public static void Jump(Match Begin){
-        ArrayList candidates = getRoundCandidates(Begin);//hakee kierrokset missä penalty määrä on pienin, jos löytyy useampi yhtä pieni, niin niistä arvotaan mihin mennään.
-        int numofcands = candidates.size();
-        roundCand RC = null;
-        
-        if(numofcands > 1){
-            RC = (roundCand)candidates.get(r.nextInt(numofcands)); //arvotaan mikä otetaan
-        } else if (numofcands == 1){
-            RC = (roundCand)candidates.get(numofcands-1); //eka
-        }
-        
-        Match JumpFinished = new Match(Begin.getHome(), Begin.getVisitor(), RC.getRoundDate(), RC.getRoundcand());
-        TabuL.addMatch(new Tabu(Begin,RC.getRoundcand()));
-        roundStack[Begin.getRound()].remove(Begin);
-        roundStack[RC.roundcand].add(JumpFinished);
-        
-        
-        //mikä kierroksen otteluista aiheuttaa eniten virheitä kierroksella?
-        Match[] test = PenaltyC.getRoundMatchWhichCausesMostPenalty(0);
-        
-        
-        
-        int[] smallPenaltyCandMatch = getEqualpenaltyFromCand(candidates);
-        
-        ArrayList RoundMatchList = getMatchesWithEqualCausePenalty(candidates); //Arpoo ehdokkaista kierroksen ja palauttaa kierroksen ottelut.
-        
-        //tähän väliin ottelun asettaminen kierrokselle?
-        
-        /*Tässä välissä pitää laskea mikä kierroksen otteluista aiheuttaa eniten virheitä kierroksella ja palauttaa lista jos löytyy useampi ottelu mikä aiheuttaa samanverran. 
-        Jos palauttaa listan niin sillon arvotaan taas ottelu mitä lähdetään sovittamaan.*/
-        
-
-        goingMatch = (Match)RoundMatchList.get(r.nextInt(RoundMatchList.size()));
-        
-        //Nyt tämän jälkeen käydään taas kaikki ottelut läpi uudella matsilla (rM)
-        
-    }
-    public static void Jump(){
-        
-    }
-    
-    
-    /*Ongelmana on nyt se että jos sovitettava ottelu aiheuttaa nolla virhettä kierroksella, 
-    niin sen huomioiminen on vaikeaa int[] tietorakenteessa.
-    Tarkoitus on toteuttaa tietorakenne, josta käy myös ilmi nollavirhetilanteet. */
-    public static ArrayList getRoundCandidates(Match Begin){
-        ArrayList retval = new ArrayList();
-        roundCand RC = null;
-        //int lastWinner = 0;
-        
-        //Etsii pienimmän virhemääräisen kierroksen.
-        int minValue = getRoundPenaltyIfThisMatchIsSetHere(r.nextInt(ROUNDS),Begin);
-        for (int i = 1; i < ROUNDS; i++) {
-            int temp = getRoundPenaltyIfThisMatchIsSetHere(i,Begin);
-            if (temp < minValue) {
-                minValue = temp;
-            }
-        }
-
-        //Kerää kaikki tällä virhemäärällä olevat kierrokset.
-        for (int i = 0; i < ROUNDS; i++) { 
-            int newPenalty = getRoundPenaltyIfThisMatchIsSetHere(i,Begin); //otetaan ylös virhetilanne jokaiselta kierrokselta
-            int oldPenalty = PenaltyC.getAllTeamsRoundPenalty(i); //Hakee kierroksen virheet ilman sovitettavaa ottelua
-
-            if(newPenalty <= minValue && newPenalty <= oldPenalty){
-                minValue = newPenalty;
-                RC = new roundCand(i, newPenalty,AllGameDates[i]);
-                retval.add(RC);
-            }
-        }
-        //Testitulostus jos löytyy nollavirheeksi muuttuvia kierroksia
-        for (Object cand : retval) {
-            roundCand tRC = (roundCand)cand;
-            if(tRC.causedpenalty == 0) System.out.println(+ tRC.roundcand + " " + tRC.causedpenalty);
-        }
-        return retval;
-    }
-
-
-    
-
-    
-    
-    public static ArrayList getMatchesWithEqualCausePenalty(int[] candidates){
-        ArrayList retval = new ArrayList();
-        
-        return retval;
-    }
-    
-    
-    
-    
-    
     
     /* Seuraava toteutus ottaa arvotusta ohjelmasta yhden ottelun ja tarkastelee aiheuttaako se lisävirheitä vai ei */
     public static boolean Move(Match findplace){
@@ -246,7 +108,8 @@ public class MM {
         return succed;
     }
     
-    /* Laskee virheet jos ottelu laitetaan tälle kierrokselle */    
+    /* Laskee virheet jos ottelu laitetaan tälle kierrokselle */  
+    //Palauttaa nollan jos ottelu sopii täydellisesti kierrokselle. Testattu.
     public static int getRoundPenaltyIfThisMatchIsSetHere(int round, Match findplace){
         List RoundMatches = new ArrayList();
         List RoundTeams = new ArrayList();
@@ -365,6 +228,16 @@ public class MM {
         
     }
     
+    public static Match getRandomMatch(){
+        int randomRound = r.nextInt(ROUNDS);
+        while(roundStack[randomRound].size() <= 1){
+            randomRound = r.nextInt(ROUNDS);
+        }
+        int roundLength = roundStack[randomRound].size();
+        Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+        return RM;
+    }
+    
     //Nää vois olla periaatteessa sama objekti, mutta toistaiseksi pidän erillään selkeyden vuoksi.
     public static class homeLock{
         int team;
@@ -404,39 +277,6 @@ public class MM {
 
 }
 
-/* tietorakenne kierrosehdokkaiden säilömiseen. 
-Sisältää kierrosehdokkaan ja ottelun aiheuttamat virheet tällä kierroksella. */
-class roundCand{
-    int roundcand;
-    Date roundDate;
-    int causedpenalty;
-    
-    public roundCand(int RC, int CP, Date RD){
-        roundcand = RC;
-        causedpenalty = CP;
-        roundDate = RD;
-    }
-    
-    public int getRoundcand() {
-        return roundcand;
-    }
-    public int getCausedpenalty() {
-        return causedpenalty;
-    }
-    public Date getRoundDate() {
-        return roundDate;
-    }
-    
-    public void setRoundcand(int roundcand) {
-        this.roundcand = roundcand;
-    }
-    public void setCausedpenalty(int causedpenalty) {
-        this.causedpenalty = causedpenalty;
-    }
-    public void setRoundDate(Date roundDate) {
-        this.roundDate = roundDate;
-    }
 
-}
 
 
