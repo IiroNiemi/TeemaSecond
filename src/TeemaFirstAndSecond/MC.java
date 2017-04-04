@@ -2,7 +2,6 @@ package TeemaFirstAndSecond;
 
 
 import static TeemaFirstAndSecond.InitializeList.AllGameDates;
-import static TeemaFirstAndSecond.MM.getRandomMatch;
 import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
@@ -54,19 +53,14 @@ public class MC {
                 roundStack[RC.roundcand].add(JumpFinished);
                     
                
-                
-
                 //mikä kierroksen otteluista aiheuttaa eniten virheitä kierroksella (samaa mikä laitettiin ei voi valita)
                 ArrayList worstMatches = PenaltyC.getRoundMatchWhichCausesMostPenalty(JumpFinished.getRound()); 
                 int numofWM = worstMatches.size();
                 if(numofWM == 0){
-                    System.out.println("kaikki kierroksen ottelut olivat tabulla, arvotaan satunnainen matsi kaikilta kierroksilta");
+                    //System.out.println("kaikki kierroksen ottelut olivat tabulla, arvotaan satunnainen matsi kaikilta kierroksilta");
                     jumpBegin = getRandomMatch();
                 } else if(numofWM == 1){
                     matchCand MC = (matchCand)worstMatches.get(0);
-                    if(TabuL.isInList(MC.getMatch(), MC.getMatch().getRound())){
-                        //System.out.println("worstMatch on tabulla!");
-                    }
                     jumpBegin = (Match) MC.getMatch();
                 } else {
                     matchCand MC = (matchCand)worstMatches.get(r.nextInt(numofWM));
@@ -77,11 +71,9 @@ public class MC {
                 System.out.println("Kandidaatteja tasan nolla");
                 //jumpBegin = getRandomMatch();
             }
-            
-        
         }
-        
     }
+    
     /*Palauttaa kierroksia jotka aiheuttavat vähiten virheitä sovitettavalla matsilla (voi olla miinusmerkkinen myös)*/
     public static ArrayList getRoundCandidates(Match Begin){
         ArrayList retval = new ArrayList();
@@ -115,6 +107,16 @@ public class MC {
         
         //int minIndex = dirtyList.indexOf(Collections.min(dirtyList)); //otetaan ehdokas millä pienin penalty
         return retval;
+    }
+    
+    public static Match getRandomMatch(){
+        int randomRound = r.nextInt(ROUNDS);
+        while(roundStack[randomRound].size() <= 1){
+            randomRound = r.nextInt(ROUNDS);
+        }
+        int roundLength = roundStack[randomRound].size();
+        Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+        return RM;
     }
 }
 

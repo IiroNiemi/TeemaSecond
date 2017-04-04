@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  *
@@ -96,18 +97,23 @@ public class PenaltyC {
             }
             
         }
-        
         //Ei palauteta jos ottelu on tabulistalla
-        for (int i = 0; i < MatchesWithPenalty.size(); i++) {
-            matchCand BmC = (matchCand)MatchesWithPenalty.get(i);
-            Match MO = (Match)BmC.getMatch();
+        for (int i = 0; i < RoundMatches.size(); i++) {
+            Match MO = (Match)RoundMatches.get(i);
             for (int j = 0; j < TabuL.size(); j++) {
                 if(TabuL.isInList(MO, MO.getRound())){
-                    MatchesWithPenalty.remove(BmC);
+                    for (int k = 0; k < MatchesWithPenalty.size(); k++) {
+                        matchCand MC = (matchCand)MatchesWithPenalty.get(k);
+                        Match ndl = MC.getMatch();
+                        if(ndl.equals(MO)){
+                            MatchesWithPenalty.remove(MC);
+                        }
+                    }
+                    
                 }
             }    
         }
-        
+
         /*Palautetaan tyhjä jos kaikki kierroksen ottelut on tabulistalla*/
         if(MatchesWithPenalty.isEmpty()){
             boolean allroundMatchesAreTabu = true; 
@@ -116,18 +122,16 @@ public class PenaltyC {
                     
             for (int i = 0; i < RoundMatches.size(); i++) {
                 Match MO = (Match)RoundMatches.get(i);
-                if(TabuL.isInList(MO, MO.getRound())){
-
-                } else {
-                    MC = new matchCand(MO, round);
+                if(!TabuL.isInList(MO, round)){
+                    MC = new matchCand(MO, 0);
                     allroundMatchesAreTabu = false;
                 }
             }
             
-            if(allroundMatchesAreTabu == false){ 
+            if(allroundMatchesAreTabu == false){ //palautetaan tyhjä lista jos kaikki on tabulla
                 retval.add(MC);
             }
-            //palautetaan tyhjä lista jos kaikki on tabulla
+            
 
         } else{
             //Valikoi suurimman
@@ -145,9 +149,9 @@ public class PenaltyC {
                     retval.add(BmC);
                 }
             }
-        }
+        } 
         
-        return retval;
+        return retval;    
     }
     
     public static int getTeamTotalPenalty(int team){

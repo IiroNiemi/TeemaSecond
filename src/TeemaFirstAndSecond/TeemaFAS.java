@@ -21,8 +21,8 @@ public class TeemaFAS {
         System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         System.out.println("Hakee...");
         
-        //while(PenaltyC.getOverallPenalty() > 100){
-            //InitializeList.StartList(); //arpoo uuden listan
+        while(PenaltyC.getOverallPenalty() > 100){
+            InitializeList.StartList(); //arpoo uuden listan
             
             //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
             for (int i = 0; i < 1000; i++) {        
@@ -31,13 +31,13 @@ public class TeemaFAS {
                 MC.BeginMoveChain(5);
                 
                 
-                //System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+                System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
                 
             }
             
             
             
-        //}
+        }
         
         
             
