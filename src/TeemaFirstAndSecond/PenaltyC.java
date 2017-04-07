@@ -1,6 +1,7 @@
 package TeemaFirstAndSecond;
 
 import static TeemaFirstAndSecond.MC.TabuL;
+import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
 import static TeemaFirstAndSecond.MM.homeTeamLock;
 import static TeemaFirstAndSecond.MM.visitTeamLock;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
@@ -55,7 +56,7 @@ public class PenaltyC {
                         }
                     } else {
                         if(Collections.frequency(RoundTeams, j) == 0){ 
-                            teamP += 1;//Yksi virhe sallittu, joten jatkossa rangaistaan poissaoloista
+                            teamP++;//Yksi virhe sallittu, joten jatkossa rangaistaan poissaoloista
                         } else {
                             //miinus yksi ettei laske ensimmäistä esiintymistä virheeksi
                             teamP += Collections.frequency(RoundTeams, j) - 1; 
@@ -81,22 +82,37 @@ public class PenaltyC {
             ArrayList roundlist = roundStack[i]; 
             for (int j = 0; j < roundlist.size(); j++) {
                 Match tempMO = (Match)roundlist.get(j);
-                for (int k = 0; k < RoundMatches.size(); k++) {
-                    Match ndl = (Match)RoundMatches.get(k);
-                    if(i == round && tempMO.getHome() == ndl.getHome() && tempMO.getVisitor() == ndl.getVisitor()){
-                        int firstP = TeamPenalty[tempMO.getHome()][round];
-                        int secondP = TeamPenalty[tempMO.getVisitor()][round];
-                        int mTotalP = firstP + secondP;
-                        if(mTotalP > 0){
-                            mC = new matchCand(ndl,mTotalP);
-                            MatchesWithPenalty.add(mC);
+                if(!TabuL.isInList(tempMO, tempMO.getRound())){
+                    for (int k = 0; k < RoundMatches.size(); k++) {
+                        Match ndl = (Match)RoundMatches.get(k);
+                        if(i == round && tempMO.getHome() == ndl.getHome() && tempMO.getVisitor() == ndl.getVisitor()){
+                            int firstP = TeamPenalty[tempMO.getHome()][round];
+                            int secondP = TeamPenalty[tempMO.getVisitor()][round];
+                            int mTotalP = firstP + secondP;
+                            if(mTotalP > 0){
+                                mC = new matchCand(ndl,mTotalP);
+                                MatchesWithPenalty.add(mC);
+                            }
+
                         }
-                        
-                    }
-                }    
+                    } 
+                }
+                   
             }
-            
         }
+        
+        if(MatchesWithPenalty.isEmpty() && RoundMatches.size() > 0){
+            for (int i = 0; i < RoundMatches.size(); i++) {
+                Match MO = (Match) RoundMatches.get(i);
+                if(!TabuL.isInList(MO,MO.getRound())){
+                    mC = new matchCand(MO,0);
+                    MatchesWithPenalty.add(mC);
+                }
+                
+            }
+        }
+        
+        /*
         //Ei palauteta jos ottelu on tabulistalla
         for (int i = 0; i < RoundMatches.size(); i++) {
             Match MO = (Match)RoundMatches.get(i);
@@ -113,7 +129,8 @@ public class PenaltyC {
                 }
             }    
         }
-
+        */
+        
         /*Palautetaan tyhjä jos kaikki kierroksen ottelut on tabulistalla*/
         if(MatchesWithPenalty.isEmpty()){
             boolean allroundMatchesAreTabu = true; 
@@ -186,6 +203,29 @@ public class PenaltyC {
             }
         }
         return sum;
+    }
+    public static void printRoundTeams(int round){
+        ArrayList MOlist = new ArrayList();
+
+        for (int j = 0; j < ROUNDS; j++) {
+            if(j == round){
+                MOlist = roundStack[j];
+                for (int k = 0; k < MOlist.size(); k++) {
+                    Match MO = (Match)MOlist.get(k);
+                    int matchP = TeamPenalty[MO.getHome()][MO.getRound()] + TeamPenalty[MO.getVisitor()][MO.getRound()];
+                    
+                    if(MC.TabuL.isInList(MO, MO.getRound())) {
+                        System.out.println(MO.toString() + "Ot. Virh. " + matchP + " Tabul");
+                    } else {
+                        System.out.println(MO.toString() + "Ot. Virh. " + matchP);
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        
     }
     
     public static int getMostMatchesRound(){
@@ -332,15 +372,33 @@ public class PenaltyC {
     public static void PrintMatchList(){ //Ohjelman tulostus
         int sum = 0;
         int lockCount = 0;
-        System.out.println("# " + "K - V" + " PVM " );
+        //System.out.println("# " + "K - V" + " PVM " );
+        System.out.println();
+        System.out.println("Ottelut: ");
+        /*
         for (Object singleRound : roundStack) { 
             ArrayList RList = (ArrayList)singleRound;
             for (Object RList1 : RList) {
                 Match MO = (Match) RList1;
-                //System.out.println( MO.toString());
-                if(MO.isLockedToRow()== true) lockCount++;
+                System.out.println( MO.toString());
+                //if(MO.isLockedToRow()== true) lockCount++;
                 sum++;
             
+            }
+        }*/
+        for (int i = 0; i < ROUNDS; i++) {
+            ArrayList RList = (ArrayList)roundStack[i];
+            if(RList.size() == 0){
+                System.out.println(i + " -");
+            } else {
+                for (Object list : RList) {
+                    Match MO = (Match) list;
+                    System.out.print(MO.toString());
+                    if(TabuL.isInList(MO, MO.getRound())) System.out.print(" Tabulla");
+                    System.out.println();
+                    sum++;
+                }
+  
             }
         }
                 

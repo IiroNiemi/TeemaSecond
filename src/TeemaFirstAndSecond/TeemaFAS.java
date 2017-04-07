@@ -21,30 +21,31 @@ public class TeemaFAS {
         System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         System.out.println("Hakee...");
         
-        while(PenaltyC.getOverallPenalty() > 100){
-            InitializeList.StartList(); //arpoo uuden listan
+        //while(PenaltyC.getOverallPenalty() > 0){
+        //for (int k  = 0; k < 1; k++) {
             
-            //Koitetaan parantaa ohjelmaa tuhat kertaa ennenkuin arvotaan uusi
+            //InitializeList.StartList(); //arpoo uuden listan
+            
             for (int i = 0; i < 1000; i++) {        
-        
-
-                MC.BeginMoveChain(5);
                 
+                MC.BeginMoveChain(6);
                 
-                System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
-                
+                if(PenaltyC.getOverallPenalty() == 0) break;
             }
             
             
             
-        }
-        
+            
+        //}
+        System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
         
             
        PenaltyC.countTeamPenalty();         
        //PenaltyC.PrintTeamErrors();
+       PenaltyC.PrintMatchList();
+
        
-       PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
+       //PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
        System.out.println("stop!");
 
     }
