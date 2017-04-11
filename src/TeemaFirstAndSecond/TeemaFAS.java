@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Iiro
  */
 public class TeemaFAS {
-    public static final int TEAMS = 15; 
-    public static final int ROUNDS = 36;
+    public static final int TEAMS = 6; 
+    public static final int ROUNDS = 12;
     public static ArrayList[] roundStack = new ArrayList[ROUNDS];
     public static int[][] TeamPenalty = new int[TEAMS][ROUNDS];
     
@@ -26,11 +26,13 @@ public class TeemaFAS {
             
             //InitializeList.StartList(); //arpoo uuden listan
             
-            for (int i = 0; i < 1000; i++) {        
+            for (int i = 0; i < 3; i++) {        
                 
-                MC.BeginMoveChain(6);
+                //MC.BeginMoveChain(6);
+                Jumper.BeginMoveChain(8);
+               
                 
-                if(PenaltyC.getOverallPenalty() == 0) break;
+                //if(PenaltyC.getOverallPenalty() == 0) break;
             }
             
             

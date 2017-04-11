@@ -14,6 +14,7 @@ public class Match implements Comparator<Match>, Comparable<Match>, Cloneable{
     private int Round;
     private Date GameDate;
     private boolean lockedToRow = false;
+    //private boolean empty = true;
     
     public Match(int home, int visitor, Date GameDate, int Round){
         this.Home = home;
@@ -24,7 +25,15 @@ public class Match implements Comparator<Match>, Comparable<Match>, Cloneable{
     }
     public Match(){ 
     }
+    /*
+    public Match(boolean empty){
+        this.empty = empty;
+    }
     
+    public boolean isEmpty() {
+        return empty;
+    }
+    */
     public boolean isLockedToRow() {
         return lockedToRow;
     }
