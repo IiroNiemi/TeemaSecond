@@ -4,7 +4,7 @@ package TeemaFirstAndSecond;
 import java.util.ArrayList;
 
 /**
- * Random seeds(100) has been set for debuging in three classes; Jumper, G and PenaltyC, remember to clear those when going production mode!
+ * Random seeds(100) has been set for debuging in two classes; G and InitializeList, remember to clear those when going production mode!
  * @author Iiro
  */
 public class TeemaFAS {
@@ -19,20 +19,18 @@ public class TeemaFAS {
         PenaltyC.countTeamPenalty(); //Counts penalty for each team
         
         System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
-        System.out.println("Hakee...");
         
         //while(PenaltyC.getOverallPenalty() > 0){
         //for (int k  = 0; k < 1; k++) {
             
             //InitializeList.StartList(); //arpoo uuden listan
             
-            for (int i = 0; i < 3; i++) {        
+            for (int i = 0; i < 3000; i++) {        
                 
                 //MC.BeginMoveChain(6);
                 Jumper.BeginMoveChain(5);
                
-                
-                //if(PenaltyC.getOverallPenalty() == 0) break;
+                if(PenaltyC.getOverallPenalty() == 0) break;
             }
             
             

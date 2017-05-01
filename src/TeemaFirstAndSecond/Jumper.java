@@ -33,11 +33,11 @@ public class Jumper {
         
         int i;
         for (i = 0; i < jumps && succes == true; i++) {
-                
+                if(PenaltyC.getOverallPenalty() == 0) break;
                 G.PrintMatchList();
                 System.out.println("hypättiin: " + JumpF.toString());
                 
-            roundCand RC = G.getRoundCandidate(JumpF);
+            roundCand RC = G.getRoundCandidate(JumpF); 
             
                 
                 System.out.println("tämä peli aiheuttaa seuraavat virheet: " + JumpF.toString());

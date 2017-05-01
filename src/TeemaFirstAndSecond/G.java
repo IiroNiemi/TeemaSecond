@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class G {
     
-    public static Random r = new Random(100);
+    public static Random r = new Random();
     
     public static Match getRandomMatch(){
         int randomRound = r.nextInt(ROUNDS);
@@ -102,6 +102,7 @@ public class G {
             retval.add(RC);
         }
         
+        //Poistaa kierroksen mistä lähdettiin
         for (int i = 0; i < retval.size(); i++) {
             roundCand FC = (roundCand)retval.get(i);
             if(Begin.getRound() == FC.getRoundcand()){
@@ -117,7 +118,7 @@ public class G {
             RCc = (roundCand)retval.get(numofcands-1); //eka
         } else if (numofcands > 1){
             RCc = (roundCand)retval.get(r.nextInt(numofcands)); //arvotaan mikä otetaan, mutta ei kuitenkaan samaa kierrosta mistä lähdettiin.
-            while(RC.getRoundcand() == Begin.getRound()){
+            while(RCc.getRoundcand() == Begin.getRound()){
                 RCc = (roundCand)retval.get(r.nextInt(numofcands));
             }
         }
@@ -201,7 +202,7 @@ public class G {
     }
     
     public static Match getRoundMatchWhichCausesMostPenalty(int round){
-        Random r = new Random(100);
+        
         ArrayList retval = new ArrayList();
         ArrayList MatchesWithPenalty = new ArrayList();
         ArrayList RoundMatches = roundStack[round];
