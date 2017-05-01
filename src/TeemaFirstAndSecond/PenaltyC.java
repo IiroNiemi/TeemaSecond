@@ -72,7 +72,7 @@ public class PenaltyC {
     }
     
     public static ArrayList getRoundMatchWhichCausesMostPenalty(int round){
-        Random r = new Random();
+        Random r = new Random(100);
         ArrayList retval = new ArrayList();
         ArrayList MatchesWithPenalty = new ArrayList();
         ArrayList RoundMatches = roundStack[round];

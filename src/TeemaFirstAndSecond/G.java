@@ -22,6 +22,7 @@ import java.util.Random;
  */
 
 public class G {
+    
     public static Random r = new Random(100);
     
     public static Match getRandomMatch(){
@@ -182,7 +183,7 @@ public class G {
         Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
         
         int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO); //Sallitaanko siirto kierrokselle jos se aiheuttaa yhtä paljon virheitä?
-        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Virhetilanne jos peli laitetaan tälle kierrokselle (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
+        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Vanha virhetilanne kierroksella (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
         int beforeMoveErrs = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
         
         double grain = r.nextDouble();
@@ -200,34 +201,32 @@ public class G {
     }
     
     public static Match getRoundMatchWhichCausesMostPenalty(int round){
-        Random r = new Random();
+        Random r = new Random(100);
         ArrayList retval = new ArrayList();
         ArrayList MatchesWithPenalty = new ArrayList();
         ArrayList RoundMatches = roundStack[round];
         matchCand mC = null;
-        
-        for (int i = 0; i < roundStack.length; i++) { 
-            ArrayList roundlist = roundStack[i]; 
-            for (int j = 0; j < roundlist.size(); j++) {
-                Match tempMO = (Match)roundlist.get(j);
-                if(!TabuL.isInList(tempMO, tempMO.getRound())){
-                    for (int k = 0; k < RoundMatches.size(); k++) {
-                        Match ndl = (Match)RoundMatches.get(k);
-                        if(i == round && tempMO.getHome() == ndl.getHome() && tempMO.getVisitor() == ndl.getVisitor()){
-                            int firstP = TeamPenalty[tempMO.getHome()][round];
-                            int secondP = TeamPenalty[tempMO.getVisitor()][round];
-                            int mTotalP = firstP + secondP;
-                            if(mTotalP > 0){
-                                mC = new matchCand(ndl,mTotalP);
-                                MatchesWithPenalty.add(mC);
-                            }
-
+            
+        for (int j = 0; j < RoundMatches.size(); j++) {
+            Match tempMO = (Match)RoundMatches.get(j);
+            if(!TabuL.isInList(tempMO, tempMO.getRound())){
+                for (int k = 0; k < RoundMatches.size(); k++) {
+                    Match ndl = (Match)RoundMatches.get(k);
+                    if(tempMO.getHome() == ndl.getHome() && tempMO.getVisitor() == ndl.getVisitor()){
+                        int firstP = TeamPenalty[tempMO.getHome()][round];
+                        int secondP = TeamPenalty[tempMO.getVisitor()][round];
+                        int mTotalP = firstP + secondP;
+                        if(mTotalP > 0){
+                            mC = new matchCand(ndl,mTotalP);
+                            MatchesWithPenalty.add(mC);
                         }
-                    } 
-                }
-                   
+
+                    }
+                } 
             }
+
         }
+        
         
         if(MatchesWithPenalty.isEmpty() && RoundMatches.size() > 0){
             for (int i = 0; i < RoundMatches.size(); i++) {

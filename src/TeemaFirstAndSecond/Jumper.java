@@ -9,7 +9,6 @@ import static TeemaFirstAndSecond.InitializeList.AllGameDates;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  *
@@ -34,6 +33,7 @@ public class Jumper {
         
         int i;
         for (i = 0; i < jumps && succes == true; i++) {
+                
                 G.PrintMatchList();
                 System.out.println("hypättiin: " + JumpF.toString());
                 
@@ -50,7 +50,7 @@ public class Jumper {
             
             succes = G.setOnRound(JumpF, RC); //jatketaanko hyppyä
             
-                System.out.println("Kokonais virh. " + PenaltyC.getOverallPenalty());
+                //System.out.println("Kokonais virh. " + PenaltyC.getOverallPenalty());
             
             
             if(succes == true){
@@ -65,7 +65,7 @@ public class Jumper {
                 System.out.println("Hyppy loppui, arvotaan uusi: ");
                 break;
             }
-            
+                System.out.println("iKierros: " + i);
         }
         
         if(i == jumps){
