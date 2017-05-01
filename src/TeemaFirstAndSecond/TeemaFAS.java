@@ -25,7 +25,7 @@ public class TeemaFAS {
             
             //InitializeList.StartList(); //arpoo uuden listan
             
-            for (int i = 0; i < 3000; i++) {        
+            for (int i = 0; i < 3; i++) {        
                 
                 //MC.BeginMoveChain(6);
                 Jumper.BeginMoveChain(5);

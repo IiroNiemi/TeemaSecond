@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class G {
     
-    public static Random r = new Random();
+    public static Random r = new Random(100);
     
     public static Match getRandomMatch(){
         int randomRound = r.nextInt(ROUNDS);

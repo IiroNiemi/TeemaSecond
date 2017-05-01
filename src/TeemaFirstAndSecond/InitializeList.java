@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class InitializeList {
     
-    public static Random r = new Random();
+    public static Random r = new Random(100);
     public static Date d = new Date();
     public static Date[] AllGameDates = {fromString("16.09.2016"),fromString("17.09.2016"),fromString("20.09.2016"),fromString("23.09.2016"),fromString("24.09.2016"),fromString("27.09.2016"),fromString("29.09.2016"),fromString("01.10.2016"),fromString("05.10.2016"),fromString("06.10.2016"),fromString("08.10.2016"),fromString("12.10.2016"),fromString("13.10.2016"),fromString("15.10.2016"),fromString("18.10.2016"), fromString("20.10.2016"),fromString("22.10.2016"),fromString("25.10.2016"),fromString("27.10.2016"),fromString("29.10.2016"),fromString("09.11.2016"),fromString("10.11.2016"),fromString("12.11.2016"),fromString("15.11.2016"),fromString("17.11.2016"),fromString("19.11.2016"),fromString("22.11.2016"),fromString("24.11.2016"),fromString("26.11.2016"),fromString("29.11.2016"),fromString("1.12.2016"),fromString("3.12.2016"),fromString("7.12.2016"),fromString("8.12.2016"),fromString("10.12.2016"),fromString("14.12.2016")};
     public static int[][] extragames ={{2,8},{8,1},{1,2},{3,13},{12,3},{13,12},{4,6},{6,5},{5,4},{7,11},{10,7},{11,10},{9,14},{15,9},{14,15}};
