@@ -177,15 +177,17 @@ public class G {
         
         
     }
-
-    public static boolean setOnRound(Match MO, roundCand RC) {
+    
+    public static boolean setOnRound(Match MO, roundCand RC) { 
         Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
         
-        int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO);
-        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita (ONKO TÄÄ OK?)
+        int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO); //Sallitaanko siirto kierrokselle jos se aiheuttaa yhtä paljon virheitä?
+        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Virhetilanne jos peli laitetaan tälle kierrokselle (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
+        int beforeMoveErrs = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
+        
         double grain = r.nextDouble();
-        if(newerr < olderr || grain < 0.0015){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
-            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand()));
+        if(newerr <= olderr || grain < 0.0015){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
+            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); //Lisää nyt oikein Tabulistalle jos se on täynnä!
             roundStack[MO.getRound()].remove(MO);
             roundStack[RC.roundcand].add(JumpFinished);
             PenaltyC.countTeamPenalty();
@@ -204,7 +206,7 @@ public class G {
         ArrayList RoundMatches = roundStack[round];
         matchCand mC = null;
         
-        for (int i = 0; i < roundStack.length; i++) {
+        for (int i = 0; i < roundStack.length; i++) { 
             ArrayList roundlist = roundStack[i]; 
             for (int j = 0; j < roundlist.size(); j++) {
                 Match tempMO = (Match)roundlist.get(j);

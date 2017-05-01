@@ -62,13 +62,14 @@ public class Jumper {
             }
             
             if(succes == false){
+                System.out.println("Hyppy loppui, arvotaan uusi: ");
                 break;
             }
             
         }
         
         if(i == jumps){
-             System.out.println("--- OK ---");
+             System.out.println("--- i == jumps ---");
             return true;
         }else{
             return false;
