@@ -121,6 +121,9 @@ public class G {
             while(RCc.getRoundcand() == Begin.getRound()){
                 RCc = (roundCand)retval.get(r.nextInt(numofcands));
             }
+        } else { //Ei palauteta nullia jos ei löydy ehdokasta, palautetaan sama mistä lähdettiin.
+            RCc = new roundCand(Begin.getRound(), 0,Begin.getGameDate());
+            return RCc;
         }
         
         

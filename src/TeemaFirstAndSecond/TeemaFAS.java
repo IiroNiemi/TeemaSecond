@@ -25,11 +25,11 @@ public class TeemaFAS {
             
             //InitializeList.StartList(); //arpoo uuden listan
             
-            for (int i = 0; i < 3; i++) {        
-                
+            for (int i = 0; i < 100; i++) {        
+                System.out.println("i: " + i);
                 //MC.BeginMoveChain(6);
-                Jumper.BeginMoveChain(5);
-               
+                Jumper.BeginMoveChain(8);
+                
                 if(PenaltyC.getOverallPenalty() == 0) break;
             }
             

@@ -33,12 +33,14 @@ public class Jumper {
         
         int i;
         for (i = 0; i < jumps && succes == true; i++) {
-                if(PenaltyC.getOverallPenalty() == 0) break;
+            if(PenaltyC.getOverallPenalty() == 0) break;
                 G.PrintMatchList();
                 System.out.println("hypättiin: " + JumpF.toString());
                 
-            roundCand RC = G.getRoundCandidate(JumpF); 
-            
+            roundCand RC = G.getRoundCandidate(JumpF);
+            if(RC.getRoundcand() == JumpF.getRound()) break; //kierrosehdokas oli sama mistä lähdettiin
+                
+                
                 
                 System.out.println("tämä peli aiheuttaa seuraavat virheet: " + JumpF.toString());
                 for (int j = 0; j < ROUNDS; j++) { 
