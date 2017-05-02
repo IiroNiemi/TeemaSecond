@@ -34,25 +34,30 @@ public class Jumper {
         int i;
         for (i = 0; i < jumps && succes == true; i++) {
             if(PenaltyC.getOverallPenalty() == 0) break;
-                G.PrintMatchList();
-                System.out.println("hypättiin: " + JumpF.toString());
+                
+                //G.PrintMatchList();
+                //System.out.println("hypättiin: " + JumpF.toString());
                 
             roundCand RC = G.getRoundCandidate(JumpF);
-            if(RC.getRoundcand() == JumpF.getRound()) break; //kierrosehdokas oli sama mistä lähdettiin
+                if(RC.getRoundcand() == JumpF.getRound()) {
+                    System.out.println("Keskeytys: Sama kierrosehdokas mistä lähdettiin");
+                    break;
+                } 
                 
                 
-                
+                /*
                 System.out.println("tämä peli aiheuttaa seuraavat virheet: " + JumpF.toString());
                 for (int j = 0; j < ROUNDS; j++) { 
                     System.out.print(j + "# VK: " + G.getRoundPenaltyIfThisMatchIsSetHere(j,JumpF));
                     if(roundStack[j].isEmpty()) System.out.print(" Tyhjä");
                     System.out.println();
                 }
+                
+                System.out.println("RoundPenalty on round " + JumpF.getRound() + " is: " +PenaltyC.getRoundPenalty(JumpF.getRound()));
                 System.out.println("Round Cand: " + RC.getRoundcand());
-            
+                */
             succes = G.setOnRound(JumpF, RC); //jatketaanko hyppyä
-            
-                //System.out.println("Kokonais virh. " + PenaltyC.getOverallPenalty());
+
             
             
             if(succes == true){
@@ -64,16 +69,17 @@ public class Jumper {
             }
             
             if(succes == false){
-                System.out.println("Hyppy loppui, arvotaan uusi: ");
+                System.out.println("succes = false");
                 break;
             }
-                System.out.println("iKierros: " + i);
+                //System.out.println("iKierros: " + i);
         }
         
         if(i == jumps){
-             System.out.println("--- i == jumps ---");
+            System.out.println("--- OK ---");
             return true;
         }else{
+            System.out.println("Keskeytys hypyllä: " + i);
             return false;
         }
         

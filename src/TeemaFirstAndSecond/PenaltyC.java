@@ -244,6 +244,21 @@ public class PenaltyC {
         return winner;
     }
     
+    public static int getOverallPenaltyIfSet(Match MO, roundCand RC){
+        Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
+        roundStack[MO.getRound()].remove(MO);
+        roundStack[RC.roundcand].add(JumpFinished);
+        
+        PenaltyC.countTeamPenalty();
+        int retval = getOverallPenalty();
+        
+        //Peruutetaan siirto
+        roundStack[RC.roundcand].remove(JumpFinished);
+        roundStack[MO.getRound()].add(MO);
+        
+        return retval;
+    }
+    
     public static int getLeastMatchesRound(){
         int tempSize = 226;
         int loser = 0;

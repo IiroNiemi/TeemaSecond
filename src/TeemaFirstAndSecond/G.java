@@ -188,17 +188,26 @@ public class G {
         
         int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO); //Sallitaanko siirto kierrokselle jos se aiheuttaa yhtä paljon virheitä?
         int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Vanha virhetilanne kierroksella (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
-        int beforeMoveErrs = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
+        
+        int beforeMoveErrorsOnRound = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
+        int afterMoveErrsOnRound = PenaltyC.getRoundPenalty(RC.getRoundcand()); //Virhetilanne kierroksella siirron jälkeen.
+        
+        int oldOverallP = PenaltyC.getOverallPenalty();
+        int newoverallPifSet = PenaltyC.getOverallPenaltyIfSet(MO, RC);
         
         double grain = r.nextDouble();
-        if(newerr <= olderr || grain < 0.0015){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
-            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); //Lisää nyt oikein Tabulistalle jos se on täynnä!
+        
+        if(newerr < olderr && afterMoveErrsOnRound <= beforeMoveErrorsOnRound || newoverallPifSet < oldOverallP || grain < 0.0015){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
+            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); 
             roundStack[MO.getRound()].remove(MO);
             roundStack[RC.roundcand].add(JumpFinished);
             PenaltyC.countTeamPenalty();
             if(grain < 0.0015) System.out.println("alle 0.0015!");
             return true;
         } else {
+            System.out.println("Huonontava siirto! "+ MO.toString() + " yritetty kierrokselle " + RC.getRoundcand() +"#");
+            System.out.println("Before: " + beforeMoveErrorsOnRound);
+            System.out.println("After: " + afterMoveErrsOnRound);
             return false;
         }
         
@@ -330,5 +339,13 @@ public class G {
         }
                 
         System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
+    }
+    public static void PrintAveragePenalty(int loops, ArrayList allPenaltys){
+        int sum = 0;
+        for (Object P : allPenaltys) {
+            sum += (int)P;
+            
+        }
+        System.out.println("KA: " + sum/loops);
     }
 }
