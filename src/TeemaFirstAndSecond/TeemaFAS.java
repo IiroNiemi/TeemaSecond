@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Iiro
  */
 public class TeemaFAS {
-    public static final int TEAMS = 15; 
-    public static final int ROUNDS = 36;
+    public static final int TEAMS = 9; 
+    public static final int ROUNDS = 18;
     public static ArrayList[] roundStack = new ArrayList[ROUNDS];
     public static int[][] TeamPenalty = new int[TEAMS][ROUNDS];
     
@@ -21,36 +21,35 @@ public class TeemaFAS {
         
         System.out.println("Alkuvirheet: " + PenaltyC.getOverallPenalty());
 
+        int i = 0;
+        int loops = 1000000;
         
         //while(PenaltyC.getOverallPenalty() > 0){
             
             //InitializeList.StartList(); //arpoo uuden listan
         
-            int loops = 2000;
-            for (int i = 0; i < loops; i++) {        
+            for (i = 0; i < loops; i++) {        
                 //System.out.println("i: " + i);
-                Jumper.BeginMoveChain(7);
                 
-                System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
-                System.out.println("");
+                Jumper.BeginMoveChain(10);
+
+                PenaltyC.countTeamPenalty();
+                if(PenaltyC.getOverallPenalty() < 10) System.out.println("Virheitä: " + PenaltyC.getOverallPenalty());
                 KA.add(PenaltyC.getOverallPenalty());
                 if(PenaltyC.getOverallPenalty() == 0) break;
             }
             
             
-            
-            
         //}
-        //System.out.println("kokonaisvirheet: " + PenaltyC.getOverallPenalty());
+        
         
        
        
        PenaltyC.countTeamPenalty();         
-       //PenaltyC.PrintTeamErrors();
        PenaltyC.PrintMatchList();
        G.PrintAveragePenalty(loops, KA);
+       if(i < loops)System.out.println("Vastaus löytyi kierroksella: " + i);
        
-       //PenaltyC.PrintMatchList(); //tulostaa otteluohjelman virheineen
 
     }
 }

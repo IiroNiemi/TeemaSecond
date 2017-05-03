@@ -1,6 +1,5 @@
 package TeemaFirstAndSecond;
 
-import static TeemaFirstAndSecond.InitializeList.AllGameDates;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
@@ -21,7 +20,7 @@ public class MM {
     public static int[][] visitTeamLock = {{0,8},{4,8},{5,8},{7,8},{8,8},{10,8},{12,8},{13,8},{0,11},{4,11},{5,11},{7,11},{8,11},{10,11},{12,11},{13,11},{0,20},{4,20},{5,20},{7,20},{8,20},{10,20},{12,20},{13,20}};
     
     
-    public static Random r = new Random();
+    public static Random r = new Random(100);
     public static TabuList TabuL = new TabuList();
     
     

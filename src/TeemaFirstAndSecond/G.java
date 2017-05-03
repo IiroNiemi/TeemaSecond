@@ -202,12 +202,12 @@ public class G {
             roundStack[MO.getRound()].remove(MO);
             roundStack[RC.roundcand].add(JumpFinished);
             PenaltyC.countTeamPenalty();
-            if(grain < 0.0015) System.out.println("alle 0.0015!");
+            //if(grain < 0.0015) System.out.println("alle 0.0015!");
             return true;
         } else {
-            System.out.println("Huonontava siirto! "+ MO.toString() + " yritetty kierrokselle " + RC.getRoundcand() +"#");
+            /*System.out.println("Huonontava siirto! "+ MO.toString() + " yritetty kierrokselle " + RC.getRoundcand() +"#");
             System.out.println("Before: " + beforeMoveErrorsOnRound);
-            System.out.println("After: " + afterMoveErrsOnRound);
+            System.out.println("After: " + afterMoveErrsOnRound);*/
             return false;
         }
         
@@ -346,6 +346,6 @@ public class G {
             sum += (int)P;
             
         }
-        System.out.println("KA: " + sum/loops);
+        System.out.println("Virheitä keskimäärin: " + sum/loops);
     }
 }

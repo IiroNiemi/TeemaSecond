@@ -40,7 +40,7 @@ public class Jumper {
                 
             roundCand RC = G.getRoundCandidate(JumpF);
                 if(RC.getRoundcand() == JumpF.getRound()) {
-                    System.out.println("Keskeytys: Sama kierrosehdokas mistä lähdettiin");
+                    //System.out.println("Keskeytys: Sama kierrosehdokas mistä lähdettiin");
                     break;
                 } 
                 
@@ -69,17 +69,17 @@ public class Jumper {
             }
             
             if(succes == false){
-                System.out.println("succes = false");
+                //System.out.println("succes = false");
                 break;
             }
                 //System.out.println("iKierros: " + i);
         }
         
         if(i == jumps){
-            System.out.println("--- OK ---");
+            //System.out.println("--- OK ---");
             return true;
         }else{
-            System.out.println("Keskeytys hypyllä: " + i);
+            //System.out.println("Keskeytys hypyllä: " + i);
             return false;
         }
         
