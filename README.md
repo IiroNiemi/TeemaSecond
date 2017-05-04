@@ -7,12 +7,15 @@ Tämänhetkinen toteutus sallii yhden joukkueen poissaolon kierrokselta, mutta t
 
 Lähdin toteuttamaan "siirtoketju" -metodia (Ejection Chains), toteutus löytyy Jumper.java tiedostosta.
 Siirtoketju toimii kuten "hill climb" -algoritmit, mutta siinä siirrot ovat kytketty toisiinsa muodostaen ketjun.
+
 https://en.wikipedia.org/wiki/Hill_climbing
 
 Algoritmi sisältää myös "Simulated annealing" toteutuksen missä sallitaan huonontava siirto hyvin pienellä todennäköisyydellä. Todennäköisyys vähenee lineaarisesti aina kun yksi huonontava siirto on sallittu. 
+
 https://en.wikipedia.org/wiki/Simulated_annealing
 
 Sisältää Tabu search- toteutuksen missä estetään samoja siirtoja. 
+
 https://en.wikipedia.org/wiki/Tabu_search
 
 
