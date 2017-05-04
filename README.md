@@ -5,11 +5,12 @@ Tämänhetkinen toteutus sallii yhden joukkueen poissaolon kierrokselta, mutta t
 
 **Major update:**
 
-Keskustelu Kynkään kanssa selvensi toteutusta huomattavasti ja aloin toteuttamaan "siirtoketju- funktiota" (_MM.BeginMoveChain_). Tämä funktio tekee 5-10 hyppyä, missä tutkitaan aiheutuneita kierrosvirheitä ja valitaan kierrokselta huonoiten sopiva ottelu seuraavaan hyppyyn. Kun hypyt loppuvat niin valitaan taas satunnainen ottelu mistä aloitetaan uusi siirtoketju
+Lähdin toteuttamaan "siirtoketju" funktiota (Ejection Chains), toteutus löytyy Jumper.java tiedostosta.
+Siirtoketju toimii kuten "hill climb" -algoritmit, mutta siinä siirrot ovat kytketty toisiinsa muodostaen ketjun.
 
-_Vieras ja kotiestoista on nyt ensimmäinen toteutus MM.ArrangeHomeAndVisitLocks(); ei kunnioita lukituksia, mutta toimii siitä huolimatta oudon hyvin, imaisee tosin vierasestojen kierrokset tyhjäksi/vähiin._
+Algoritmi sisältää myös "Simulated annealing" toteutuksen missä sallitaan huonontava siirto hyvin pienellä todennäköisyydellä. Todennäköisyys vähenee lineaarisesti aina kun yksi huonontava siirto on sallittu. https://en.wikipedia.org/wiki/Simulated_annealing
 
-_Lukitut-, lisä- ja lukitutlisäpelit asettuvat nyt alustuksessa._
+Sisältää Tabu search- toteutuksen missä estetään samoja siirtoja. https://en.wikipedia.org/wiki/Tabu_search
 
 
 Rajoitteet:
