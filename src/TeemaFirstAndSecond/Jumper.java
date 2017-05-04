@@ -5,10 +5,6 @@
  */
 package TeemaFirstAndSecond;
 
-import static TeemaFirstAndSecond.InitializeList.AllGameDates;
-import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
-import static TeemaFirstAndSecond.TeemaFAS.roundStack;
-import java.util.ArrayList;
 
 /**
  *
@@ -40,22 +36,9 @@ public class Jumper {
                 
             roundCand RC = G.getRoundCandidate(JumpF);
                 if(RC.getRoundcand() == JumpF.getRound()) {
-                    //System.out.println("Keskeytys: Sama kierrosehdokas mistä lähdettiin");
                     break;
                 } 
-                
-                
-                /*
-                System.out.println("tämä peli aiheuttaa seuraavat virheet: " + JumpF.toString());
-                for (int j = 0; j < ROUNDS; j++) { 
-                    System.out.print(j + "# VK: " + G.getRoundPenaltyIfThisMatchIsSetHere(j,JumpF));
-                    if(roundStack[j].isEmpty()) System.out.print(" Tyhjä");
-                    System.out.println();
-                }
-                
-                System.out.println("RoundPenalty on round " + JumpF.getRound() + " is: " +PenaltyC.getRoundPenalty(JumpF.getRound()));
-                System.out.println("Round Cand: " + RC.getRoundcand());
-                */
+
             succes = G.setOnRound(JumpF, RC); //jatketaanko hyppyä
 
             
@@ -69,10 +52,8 @@ public class Jumper {
             }
             
             if(succes == false){
-                //System.out.println("succes = false");
                 break;
             }
-                //System.out.println("iKierros: " + i);
         }
         
         if(i == jumps){

@@ -22,7 +22,7 @@ public class TeemaFAS {
         System.out.println("Alkuvirheet: " + PenaltyC.getOverallPenalty());
 
         int i = 0;
-        int loops = 1000000;
+        int loops = 50000;
         
         //while(PenaltyC.getOverallPenalty() > 0){
             
@@ -35,20 +35,25 @@ public class TeemaFAS {
 
                 PenaltyC.countTeamPenalty();
                 if(PenaltyC.getOverallPenalty() < 10) System.out.println("Virheitä: " + PenaltyC.getOverallPenalty());
+                if(i % 10000 == 0) G.PrintMatchList();
                 KA.add(PenaltyC.getOverallPenalty());
                 if(PenaltyC.getOverallPenalty() == 0) break;
             }
-            
-            
         //}
         
         
        
-       
-       PenaltyC.countTeamPenalty();         
-       PenaltyC.PrintMatchList();
-       G.PrintAveragePenalty(loops, KA);
-       if(i < loops)System.out.println("Vastaus löytyi kierroksella: " + i);
+        
+
+        PenaltyC.countTeamPenalty();         
+        G.PrintMatchList();
+        G.PrintAveragePenalty(loops, KA);
+        PenaltyC.PrintTeamErrors();
+        
+        
+        
+        
+        if(i < loops)System.out.println("Vastaus löytyi kierroksella: " + i);
        
 
     }

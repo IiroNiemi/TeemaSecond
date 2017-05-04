@@ -26,8 +26,10 @@ public class InitializeList {
     public static ArrayList extraMatches = new ArrayList();//extragames lista, mutta korjattu yhdellä numerolla alaspäin
     public static ArrayList lockedMatches = new ArrayList(); //lockedGames lista, mutta korjattu yhdellä numerolla alaspäin
     public static ArrayList lockedextraMatches = new ArrayList();
+    public static double grainLimit;
     
     public static void StartList(){
+        grainLimit = 0.0015; //Init for SA in G.setOnRound()
         List roundList = new ArrayList();
         Match singleMatch = null;
         List retval = new ArrayList();

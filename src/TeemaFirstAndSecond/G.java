@@ -6,6 +6,7 @@
 package TeemaFirstAndSecond;
 
 import static TeemaFirstAndSecond.InitializeList.AllGameDates;
+import static TeemaFirstAndSecond.InitializeList.grainLimit;
 import static TeemaFirstAndSecond.Jumper.TabuL;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
@@ -24,6 +25,8 @@ import java.util.Random;
 public class G {
     
     public static Random r = new Random(100);
+
+    
     
     public static Match getRandomMatch(){
         int randomRound = r.nextInt(ROUNDS);
@@ -197,17 +200,15 @@ public class G {
         
         double grain = r.nextDouble();
         
-        if(newerr < olderr && afterMoveErrsOnRound <= beforeMoveErrorsOnRound || newoverallPifSet < oldOverallP || grain < 0.0015){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
+        if(newerr < olderr && afterMoveErrsOnRound <= beforeMoveErrorsOnRound || newoverallPifSet < oldOverallP || grain < grainLimit){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
             TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); 
             roundStack[MO.getRound()].remove(MO);
             roundStack[RC.roundcand].add(JumpFinished);
             PenaltyC.countTeamPenalty();
-            //if(grain < 0.0015) System.out.println("alle 0.0015!");
+            if(grain < grainLimit) grainLimit = grainLimit-0.000051; //System.out.println("alle grainLimitin: " + grainLimit);
+            
             return true;
         } else {
-            /*System.out.println("Huonontava siirto! "+ MO.toString() + " yritetty kierrokselle " + RC.getRoundcand() +"#");
-            System.out.println("Before: " + beforeMoveErrorsOnRound);
-            System.out.println("After: " + afterMoveErrsOnRound);*/
             return false;
         }
         
