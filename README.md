@@ -3,18 +3,18 @@ Teema 2:n kehitys
 
 Tämänhetkinen toteutus sallii yhden joukkueen poissaolon kierrokselta, mutta tästä huolimatta virheitä esiintyy edelleen. 
 
-**Major update:**
+**Sisältö:**
 
-Lähdin toteuttamaan "siirtoketju" funktiota (Ejection Chains), toteutus löytyy Jumper.java tiedostosta.
+Lähdin toteuttamaan "siirtoketju" -metodia (Ejection Chains), toteutus löytyy Jumper.java tiedostosta.
 Siirtoketju toimii kuten "hill climb" -algoritmit, mutta siinä siirrot ovat kytketty toisiinsa muodostaen ketjun.
+https://en.wikipedia.org/wiki/Hill_climbing
 
-Algoritmi sisältää myös "Simulated annealing" toteutuksen missä sallitaan huonontava siirto hyvin pienellä todennäköisyydellä. Todennäköisyys vähenee lineaarisesti aina kun yksi huonontava siirto on sallittu. https://en.wikipedia.org/wiki/Simulated_annealing
+Algoritmi sisältää myös "Simulated annealing" toteutuksen missä sallitaan huonontava siirto hyvin pienellä todennäköisyydellä. Todennäköisyys vähenee lineaarisesti aina kun yksi huonontava siirto on sallittu. 
+https://en.wikipedia.org/wiki/Simulated_annealing
 
-Sisältää Tabu search- toteutuksen missä estetään samoja siirtoja. https://en.wikipedia.org/wiki/Tabu_search
+Sisältää Tabu search- toteutuksen missä estetään samoja siirtoja. 
+https://en.wikipedia.org/wiki/Tabu_search
 
-
-Rajoitteet:
-http://web.samk.fi/staff/jari.kyngas/teemat/Rajoitteet_2.txt
 
 
 **Tehtävä - Jari Kyngäs**
@@ -44,3 +44,5 @@ Kohdissa 1 ja 2 on mahdollista aikaansaada täydellinen sarjaohjelma. Se tarkoit
 
 Kohdassa 3 breakkien minimääräksi sain omissa testeissäni 64-70 kpl. Ja tämä tietenkin niin, että kohtien 1 ja 2 rajoitteissa ei ollut yhtään virhettä. Breakkeja ei kuitenkaan voi saada koskaan nollille, joten tämä rajoite on soft-rajoite.
 
+Rajoitteet:
+http://web.samk.fi/staff/jari.kyngas/teemat/Rajoitteet_2.txt
