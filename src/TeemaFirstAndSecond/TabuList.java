@@ -6,8 +6,6 @@
 package TeemaFirstAndSecond;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**

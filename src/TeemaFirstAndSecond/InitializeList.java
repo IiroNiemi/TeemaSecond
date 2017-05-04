@@ -145,9 +145,6 @@ public class InitializeList {
         lockedextraMatches.clear();
     }
 
-    
-    
-    
     //----Helper for parsing date----
     private static Date fromString( String pvm ) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");

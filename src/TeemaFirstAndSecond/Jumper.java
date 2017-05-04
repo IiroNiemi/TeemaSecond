@@ -31,9 +31,6 @@ public class Jumper {
         for (i = 0; i < jumps && succes == true; i++) {
             if(PenaltyC.getOverallPenalty() == 0) break;
                 
-                //G.PrintMatchList();
-                //System.out.println("hypättiin: " + JumpF.toString());
-                
             roundCand RC = G.getRoundCandidate(JumpF);
                 if(RC.getRoundcand() == JumpF.getRound()) {
                     break;
@@ -68,42 +65,5 @@ public class Jumper {
         
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-}
-
-class Flag{
-    boolean Flg;
-    public Flag(){}
-    public Flag(boolean UpOrDown){
-        this.Flg = UpOrDown;
-    }
-    public boolean isFlg() {
-        return Flg;
-    }
-    public void setFlg(boolean Flg) {
-        this.Flg = Flg;
-    }
 }

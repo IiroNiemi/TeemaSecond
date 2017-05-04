@@ -14,6 +14,7 @@ import static TeemaFirstAndSecond.TeemaFAS.TeamPenalty;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -26,54 +27,32 @@ public class G {
     
     public static Random r = new Random(100);
 
-    
-    
-    public static Match getRandomMatch(){
-        int randomRound = r.nextInt(ROUNDS);
-        while(roundStack[randomRound].size() <= 0){
-            randomRound = r.nextInt(ROUNDS);
-        }
-        int roundLength = roundStack[randomRound].size();
-        Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+    public static boolean setOnRound(Match MO, roundCand RC) { 
+        Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
         
-        while(TabuL.isInList(RM, RM.getRound())){
-            randomRound = r.nextInt(ROUNDS);
-            while(roundStack[randomRound].size() <= 0){
-                randomRound = r.nextInt(ROUNDS);
-            }
-            roundLength = roundStack[randomRound].size();
-            RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
-        }
+        int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO); //Sallitaanko siirto kierrokselle jos se aiheuttaa yhtä paljon virheitä?
+        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Vanha virhetilanne kierroksella (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
         
+        int beforeMoveErrorsOnRound = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
+        int afterMoveErrsOnRound = PenaltyC.getRoundPenalty(RC.getRoundcand()); //Virhetilanne kierroksella siirron jälkeen.
         
-        return RM;
-    }
-    
-    public static Match getRandomMatch(int round){
-        ArrayList<Match> roundmatches = roundStack[round];
-        ArrayList<Match> retval = new ArrayList();
+        int oldOverallP = PenaltyC.getOverallPenalty();
+        int newoverallPifSet = PenaltyC.getOverallPenaltyIfSet(MO, RC);
         
-        for (int i = 0; i < roundmatches.size(); i++) {
-            Match MO = roundmatches.get(i);
-            Match nMO = new Match(MO.getHome(),MO.getVisitor(),MO.getGameDate(),MO.getRound());
-            retval.add(nMO);
+        double grain = r.nextDouble();
+        
+        if(newerr < olderr && afterMoveErrsOnRound <= beforeMoveErrorsOnRound || newoverallPifSet < oldOverallP || grain < grainLimit){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
+            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); 
+            roundStack[MO.getRound()].remove(MO);
+            roundStack[RC.roundcand].add(JumpFinished);
+            PenaltyC.countTeamPenalty();
+            if(grain < grainLimit) grainLimit = grainLimit-0.000051; //System.out.println("alle grainLimitin: " + grainLimit);
+            
+            return true;
+        } else {
+            return false;
         }
         
-        int roundS = roundmatches.size();
-        for (int i = 0; i < roundS; i++) {
-            Match MO = roundmatches.get(i);
-            if(TabuL.isInList(MO, MO.getRound())){
-                retval.remove(MO);
-            }
-        }
-        
-        Match RM = null;
-        roundS = retval.size();
-        if(roundS > 0){
-            RM = retval.get(r.nextInt(roundS));
-        }
-        return RM;
-
     }
     
     public static roundCand getRoundCandidate(Match Begin){
@@ -186,34 +165,6 @@ public class G {
         
     }
     
-    public static boolean setOnRound(Match MO, roundCand RC) { 
-        Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
-        
-        int newerr = getRoundPenaltyIfThisMatchIsSetHere(RC.getRoundcand(),MO); //Sallitaanko siirto kierrokselle jos se aiheuttaa yhtä paljon virheitä?
-        int olderr = PenaltyC.getRoundPenalty(JumpFinished.getRound()); //Vanha virhetilanne kierroksella (tyhjäkierros antaa virheitä koska sieltä puuttuu otteluita.) 
-        
-        int beforeMoveErrorsOnRound = PenaltyC.getRoundPenalty(MO.getRound()); //Lähtötilanteen virheet siirrettävältä kierrokselta
-        int afterMoveErrsOnRound = PenaltyC.getRoundPenalty(RC.getRoundcand()); //Virhetilanne kierroksella siirron jälkeen.
-        
-        int oldOverallP = PenaltyC.getOverallPenalty();
-        int newoverallPifSet = PenaltyC.getOverallPenaltyIfSet(MO, RC);
-        
-        double grain = r.nextDouble();
-        
-        if(newerr < olderr && afterMoveErrsOnRound <= beforeMoveErrorsOnRound || newoverallPifSet < oldOverallP || grain < grainLimit){ //Sallitaan huonontava siirto hyvin pienellä todennäköisyydellä (SA)
-            TabuL.addMatch(new Tabu(JumpFinished,RC.getRoundcand())); 
-            roundStack[MO.getRound()].remove(MO);
-            roundStack[RC.roundcand].add(JumpFinished);
-            PenaltyC.countTeamPenalty();
-            if(grain < grainLimit) grainLimit = grainLimit-0.000051; //System.out.println("alle grainLimitin: " + grainLimit);
-            
-            return true;
-        } else {
-            return false;
-        }
-        
-    }
-    
     public static Match getRoundMatchWhichCausesMostPenalty(int round){
         
         ArrayList retval = new ArrayList();
@@ -306,6 +257,54 @@ public class G {
         
     }
     
+    public static Match getRandomMatch(){
+        int randomRound = r.nextInt(ROUNDS);
+        while(roundStack[randomRound].size() <= 0){
+            randomRound = r.nextInt(ROUNDS);
+        }
+        int roundLength = roundStack[randomRound].size();
+        Match RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+        
+        while(TabuL.isInList(RM, RM.getRound())){
+            randomRound = r.nextInt(ROUNDS);
+            while(roundStack[randomRound].size() <= 0){
+                randomRound = r.nextInt(ROUNDS);
+            }
+            roundLength = roundStack[randomRound].size();
+            RM = (Match)roundStack[randomRound].get(r.nextInt(roundLength));
+        }
+        
+        
+        return RM;
+    }
+    
+    public static Match getRandomMatch(int round){
+        ArrayList<Match> roundmatches = roundStack[round];
+        ArrayList<Match> retval = new ArrayList();
+        
+        for (int i = 0; i < roundmatches.size(); i++) {
+            Match MO = roundmatches.get(i);
+            Match nMO = new Match(MO.getHome(),MO.getVisitor(),MO.getGameDate(),MO.getRound());
+            retval.add(nMO);
+        }
+        
+        int roundS = roundmatches.size();
+        for (int i = 0; i < roundS; i++) {
+            Match MO = roundmatches.get(i);
+            if(TabuL.isInList(MO, MO.getRound())){
+                retval.remove(MO);
+            }
+        }
+        
+        Match RM = null;
+        roundS = retval.size();
+        if(roundS > 0){
+            RM = retval.get(r.nextInt(roundS));
+        }
+        return RM;
+
+    }
+    
     public static void PrintMatchList(){ //Ohjelman tulostus
         int sum = 0;
         int lockCount = 0;
@@ -349,4 +348,70 @@ public class G {
         }
         System.out.println("Virheitä keskimäärin: " + sum/loops);
     }
+}
+
+class roundCand implements Comparable<roundCand>{
+    int roundcand;
+    Date roundDate;
+    int penalty;
+    
+    public roundCand(int RC, int CP, Date RD){
+        roundcand = RC;
+        penalty = CP;
+        roundDate = RD;
+    }
+    
+    public int getRoundcand() {
+        return roundcand;
+    }
+    public int getCausedpenalty() {
+        return penalty;
+    }
+    public Date getRoundDate() {
+        return roundDate;
+    }
+    
+    public void setRoundcand(int roundcand) {
+        this.roundcand = roundcand;
+    }
+    public void setCausedpenalty(int causedpenalty) {
+        this.penalty = causedpenalty;
+    }
+    public void setRoundDate(Date roundDate) {
+        this.roundDate = roundDate;
+    }
+
+    @Override
+    public int compareTo(roundCand t) {
+        return this.penalty - t.penalty;
+    }
+
+}
+
+class matchCand{
+
+    Match match;
+    int mPenalty;
+    
+    public matchCand(Match MC, int mP){
+        match = MC;
+        mPenalty = mP;
+    }
+    
+    public Match getMatch() {
+        return match;
+    }
+
+    public int getmPenalty() {
+        return mPenalty;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    public void setmPenalty(int mPenalty) {
+        this.mPenalty = mPenalty;
+    }
+
 }

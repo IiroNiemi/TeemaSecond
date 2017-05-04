@@ -1,21 +1,18 @@
 package TeemaFirstAndSecond;
 
-import static TeemaFirstAndSecond.MC.TabuL;
-import static TeemaFirstAndSecond.MM.getRoundPenaltyIfThisMatchIsSetHere;
+
+
+import static TeemaFirstAndSecond.Jumper.TabuL;
 import static TeemaFirstAndSecond.MM.homeTeamLock;
 import static TeemaFirstAndSecond.MM.visitTeamLock;
 import static TeemaFirstAndSecond.TeemaFAS.ROUNDS;
 import static TeemaFirstAndSecond.TeemaFAS.TEAMS;
 import static TeemaFirstAndSecond.TeemaFAS.TeamPenalty;
 import static TeemaFirstAndSecond.TeemaFAS.roundStack;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  *
@@ -204,45 +201,6 @@ public class PenaltyC {
         }
         return sum;
     }
-    public static void printRoundTeams(int round){
-        ArrayList MOlist = new ArrayList();
-
-        for (int j = 0; j < ROUNDS; j++) {
-            if(j == round){
-                MOlist = roundStack[j];
-                for (int k = 0; k < MOlist.size(); k++) {
-                    Match MO = (Match)MOlist.get(k);
-                    int matchP = TeamPenalty[MO.getHome()][MO.getRound()] + TeamPenalty[MO.getVisitor()][MO.getRound()];
-                    
-                    if(MC.TabuL.isInList(MO, MO.getRound())) {
-                        System.out.println(MO.toString() + "Ot. Virh. " + matchP + " Tabul");
-                    } else {
-                        System.out.println(MO.toString() + "Ot. Virh. " + matchP);
-                    }
-                    
-                    
-                }
-            }
-        }
-        
-        
-    }
-    
-    public static int getMostMatchesRound(){
-        int tempSize = 0;
-        int winner = 0;
-        
-        for (int i = 0; i < roundStack.length; i++) {
-            
-            if(roundStack[i].size() > tempSize){
-                tempSize = roundStack[i].size();
-                winner = i;
-            }
-            
-        }
-        
-        return winner;
-    }
     
     public static int getOverallPenaltyIfSet(Match MO, roundCand RC){
         Match JumpFinished = new Match(MO.getHome(), MO.getVisitor(), RC.getRoundDate(), RC.getRoundcand()); 
@@ -259,20 +217,6 @@ public class PenaltyC {
         return retval;
     }
     
-    public static int getLeastMatchesRound(){
-        int tempSize = 226;
-        int loser = 0;
-        
-        for (int i = 0; i < roundStack.length; i++) {
-            
-            if(roundStack[i].size() <= tempSize){
-                tempSize = roundStack[i].size();
-                loser = i;
-            }
-        }
-        return loser;
-    }
-
     static int getRoundPenalty(int round) {
         int sum = 0;
         
@@ -286,32 +230,6 @@ public class PenaltyC {
 
         return sum;
     }
-    
-    public static int getRoundSize(int round){
-        int roundSize = 0;
-        for (int i = 0; i < roundStack.length; i++) {
-            
-            if(i == round){
-                roundSize = roundStack[i].size();
-            }
-        }
-        return roundSize;
-    }
-    
-    public static int getAllMatchesCount(){
-        int sum = 0;
-        for (Object singleRound : roundStack) { 
-            ArrayList RList = (ArrayList)singleRound;
-            for (Object RList1 : RList) {
-                Match MO = (Match) RList1;
-                sum++;
-            
-            }
-        }
-        return sum;
-    }
-    
-
     
     public static ArrayList[] GetHomeAndVisitPrevents(){
         /*Tämä toteutus toimii virheenlaskentana, eli täällä ei muuteta mitään, palautetaan ainoastaan lista virheellisistä otteluista */
@@ -367,6 +285,7 @@ public class PenaltyC {
 
         return retval;
     }
+    
     //---- PRINTERS ---
     public static void PrintTeamErrors(){
         System.out.println("TeamPenalty:"); //Listataan joukkueiden virheet
@@ -419,7 +338,6 @@ public class PenaltyC {
                 
         System.out.println("Virheet: " + PenaltyC.getOverallPenalty() + " otteluja: " + sum + " Lukittuja: " + lockCount); 
     }
-    
     public static void PrintHomePrevents(){ //Tulostaa kaikki kotiestot
         List RoundMatches = new ArrayList();
         List ListOfHomeLocks = new ArrayList();

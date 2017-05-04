@@ -48,9 +48,6 @@ public class TeemaFAS {
         PenaltyC.countTeamPenalty();         
         G.PrintMatchList();
         G.PrintAveragePenalty(loops, KA);
-        PenaltyC.PrintTeamErrors();
-        
-        
         
         
         if(i < loops)System.out.println("Vastaus löytyi kierroksella: " + i);
